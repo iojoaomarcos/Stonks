@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "269753188394",
+    "firebase_url": "https://stonks-bd072.firebaseio.com",
+    "project_id": "stonks-bd072",
+    "storage_bucket": "stonks-bd072.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:269753188394:android:5c89ba37dff28e0bffc353",
+        "android_client_info": {
+          "package_name": "com.example.projeto_final_acoes"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "269753188394-an47rq98n8eou6at8j4fh7eseqiio3ak.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.projeto_final_acoes",
+            "certificate_hash": "d8777fcc99d9ad9a26efb89b23830cb279c5cf8b"
+          }
+        },
+        {
+          "client_id": "269753188394-i3b39mgu9242of4mulr0psvuop1f97dh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyATUUYWPOG5RDd0XsaOYDCTOZXsbxuxaiE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "269753188394-i3b39mgu9242of4mulr0psvuop1f97dh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
