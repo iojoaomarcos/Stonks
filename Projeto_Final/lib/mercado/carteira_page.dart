@@ -117,12 +117,12 @@ class _CarteiraPageState extends State<CarteiraPage> {
       //     }),
 
       body: ListView.builder(
-        itemCount: items.length,
-        itemBuilder: (context, index) {
-          final item = items[index];
-          // itemCount: stockList.length,
-          // itemBuilder: (_, index) {
-          //   final item = items[index];
+        // itemCount: items.length,
+        // itemBuilder: (context, index) {
+        //   final item = items[index];
+        itemCount: stockList.length,
+        itemBuilder: (_, index) {
+          final item = stockList[index].business;
 
           return Dismissible(
             key: Key(item), // Chave de identificacao de item
