@@ -13,23 +13,20 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
-          gradient: LinearGradient(colors: [Colors.lightBlue[200], Colors.lightBlue[800]],
-            begin: FractionalOffset.topLeft,
-            end: FractionalOffset.bottomRight,
-            stops: [0.0, 1.0],
-            tileMode: TileMode.clamp
-          )
-        ),
+            gradient: LinearGradient(
+                colors: [Colors.lightBlue[200], Colors.lightBlue[800]],
+                begin: FractionalOffset.topLeft,
+                end: FractionalOffset.bottomRight,
+                stops: [0.0, 1.0],
+                tileMode: TileMode.clamp)),
         child: Center(
           child: Column(
             mainAxisSize: MainAxisSize.max,
             children: <Widget>[
               Padding(
                 padding: const EdgeInsets.only(top: 250.0, bottom: 70.0),
-                child: Image(
-                  image: AssetImage("images/stonks.png"),
-                  height: 80.0
-                ),
+                child:
+                    Image(image: AssetImage("images/stonks.png"), height: 80.0),
               ),
               _signInButton(),
             ],
@@ -43,9 +40,7 @@ class _LoginPageState extends State<LoginPage> {
     return Container(
       decoration: ShapeDecoration(
         color: Colors.white,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(40)
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
       ),
       child: OutlineButton(
         splashColor: Colors.grey,

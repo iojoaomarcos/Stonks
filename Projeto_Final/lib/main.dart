@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_final_acoes/login/login_page.dart';
 
-void main(){
+void main() {
   runApp(MaterialApp(
     home: LoginPage(),
     theme: ThemeData(
       hintColor: Colors.blueAccent,
       primaryColor: Colors.white,
       inputDecorationTheme: InputDecorationTheme(
-        enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.black)),
-        focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.black)),
-        hintStyle: TextStyle(color: Colors.white)
-      ),
+          enabledBorder:
+              OutlineInputBorder(borderSide: BorderSide(color: Colors.black)),
+          focusedBorder:
+              OutlineInputBorder(borderSide: BorderSide(color: Colors.black)),
+          hintStyle: TextStyle(color: Colors.white)),
     ),
     debugShowCheckedModeBanner: false,
   ));

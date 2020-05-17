@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:projeto_final_acoes/conversor_moedas/conversor_page.dart';
 import 'package:projeto_final_acoes/helpers/mercado_helper.dart';
 import 'package:projeto_final_acoes/mercado/buscaAcao_page.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:projeto_final_acoes/mercado/stock.dart';
 
 class CarteiraPage extends StatefulWidget {
   CarteiraPage({Key key}) : super(key: key); ////////Chave para lista Mercado
@@ -10,6 +13,8 @@ class CarteiraPage extends StatefulWidget {
 }
 
 class _CarteiraPageState extends State<CarteiraPage> {
+  List<Stock> stockList = [];
+
   //itens estaticos
   final items = List<String>.generate(
       20, (i) => "Item qwerty ${i + 1}"); //////lista Mercado
@@ -24,6 +29,30 @@ class _CarteiraPageState extends State<CarteiraPage> {
   @override
   void initState() {
     super.initState();
+/////////////////////////////////////////////
+    DatabaseReference stocksRef =
+        FirebaseDatabase.instance.reference().child("u1");
+
+    stocksRef.once().then((DataSnapshot snap) {
+      var KEYS = snap.value.keys;
+      var DATA = snap.value;
+
+      stockList.clear();
+
+      for (var individualKey in KEYS) {
+        Stock stonks = new Stock(
+          DATA[individualKey]['business'],
+          DATA[individualKey]['stock'],
+        );
+
+        stockList.add(stonks);
+      }
+
+      setState(() {
+        print('Tamanho da lista de acoes: $stockList.lenght');
+      });
+    });
+    /////////////////////////////////////////////////
 
     helper.getAllCarteiras().then((list) {
       setState(() {
@@ -91,6 +120,9 @@ class _CarteiraPageState extends State<CarteiraPage> {
         itemCount: items.length,
         itemBuilder: (context, index) {
           final item = items[index];
+          // itemCount: stockList.length,
+          // itemBuilder: (_, index) {
+          //   final item = items[index];
 
           return Dismissible(
             key: Key(item), // Chave de identificacao de item
@@ -102,7 +134,8 @@ class _CarteiraPageState extends State<CarteiraPage> {
 
               //Confirmando que item foi removido
               Scaffold.of(context) //item =
-                  .showSnackBar(SnackBar(content: Text("$item dismissed")));
+                  .showSnackBar(
+                      SnackBar(content: Text("$item Foi removido da lista")));
             },
             // Quando o item eh arrastado, se mostra uma linha vermelha
             // induzindo o significado de exclusao
