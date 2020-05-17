@@ -4,24 +4,28 @@ import 'package:projeto_final_acoes/helpers/mercado_helper.dart';
 import 'package:projeto_final_acoes/mercado/buscaAcao_page.dart';
 
 class CarteiraPage extends StatefulWidget {
+  CarteiraPage({Key key}) : super(key: key); ////////Chave para lista Mercado
   @override
   _CarteiraPageState createState() => _CarteiraPageState();
 }
 
 class _CarteiraPageState extends State<CarteiraPage> {
+  //itens estaticos
+  final items = List<String>.generate(
+      20, (i) => "Item qwerty ${i + 1}"); //////lista Mercado
 
   CarteiraHelper helper = CarteiraHelper();
 
   List<Carteira> carteiras = List();
 
   Icon _cusIcon = Icon(Icons.search);
-  Widget _cusSearchBar = Text("Carteira");
+  Widget _cusSearchBar = Text("Mercado");
 
   @override
   void initState() {
     super.initState();
 
-    helper.getAllCarteiras().then((list){
+    helper.getAllCarteiras().then((list) {
       setState(() {
         carteiras = list;
       });
@@ -37,49 +41,78 @@ class _CarteiraPageState extends State<CarteiraPage> {
         backgroundColor: Colors.blueAccent,
         actions: <Widget>[
           IconButton(
-            icon: _cusIcon,
-            onPressed: (){
-              setState(() {
-                if(this._cusIcon.icon == Icons.search){
-                  this._cusIcon = Icon(Icons.cancel);
-                  this._cusSearchBar = TextField(
-                    textInputAction: TextInputAction.go,
-                    autofocus: true,
-                    decoration: InputDecoration(
-                      enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.black)),
-                      focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.black)),
-                      hintText: "Procurar...",
-                      hintStyle: TextStyle(color: Colors.black)
-                    ),
-                    style: TextStyle(color: Colors.white, fontSize: 16.0),
-                  );
-                }
-                else{
-                  this._cusIcon = Icon(Icons.search);
-                  this._cusSearchBar = Text("Carteira");
-                }
-              });
-            }
-          )
+              icon: _cusIcon,
+              onPressed: () {
+                setState(() {
+                  if (this._cusIcon.icon == Icons.search) {
+                    this._cusIcon = Icon(Icons.cancel);
+                    this._cusSearchBar = TextField(
+                      textInputAction: TextInputAction.go,
+                      autofocus: true,
+                      decoration: InputDecoration(
+                          enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.black)),
+                          focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.black)),
+                          hintText: "Procurar...",
+                          hintStyle: TextStyle(color: Colors.black)),
+                      style: TextStyle(color: Colors.white, fontSize: 16.0),
+                    );
+                  } else {
+                    this._cusIcon = Icon(Icons.search);
+                    this._cusSearchBar = Text("Mercado");
+                  }
+                });
+              })
         ],
         elevation: 20.0,
       ),
+
       floatingActionButton: FloatingActionButton(
-        onPressed: (){
-          Navigator.push(context,
+        onPressed: () {
+          Navigator.push(
+            context,
             MaterialPageRoute(builder: (context) => BuscaAcaoPage()),
           );
         },
         child: Icon(Icons.add),
         backgroundColor: Colors.blueAccent,
       ),
+
+      // Codigo do Felipe (comentado pelo Joao Marcos)
+      // body: ListView.builder(
+      //     padding: EdgeInsets.all(10.0),
+      //     itemCount: carteiras.length,
+      //     itemBuilder: (context, index) {
+      //       return _carteiraCard(context, index);
+      //     }),
+
       body: ListView.builder(
-        padding: EdgeInsets.all(10.0),
-        itemCount: carteiras.length,
+        itemCount: items.length,
         itemBuilder: (context, index) {
-          return _carteiraCard(context, index);
-        }
+          final item = items[index];
+
+          return Dismissible(
+            key: Key(item), // Chave de identificacao de item
+            onDismissed: (direction) {
+              // Se arrastado, remove da lista
+              setState(() {
+                items.removeAt(index);
+              });
+
+              //Confirmando que item foi removido
+              Scaffold.of(context) //item =
+                  .showSnackBar(SnackBar(content: Text("$item dismissed")));
+            },
+            // Quando o item eh arrastado, se mostra uma linha vermelha
+            // induzindo o significado de exclusao
+            background: Container(color: Colors.red),
+            child: ListTile(title: Text('$item')),
+          );
+        },
       ),
+
+////////////////////////////////////////////////////////////////
       bottomNavigationBar: BottomAppBar(
         child: Row(
           mainAxisSize: MainAxisSize.max,
@@ -111,15 +144,16 @@ class _CarteiraPageState extends State<CarteiraPage> {
     );
   }
 
-  Widget _carteiraCard(BuildContext context, int index){
+  Widget _carteiraCard(BuildContext context, int index) {
     return GestureDetector(
       child: Card(
         child: Padding(
           padding: EdgeInsets.all(10.0),
           child: Column(
             children: <Widget>[
-              Text(carteiras[index].sigla ?? "",
-                style: TextStyle(fontSize: 22.0, fontWeight: FontWeight.bold),  
+              Text(
+                carteiras[index].sigla ?? "",
+                style: TextStyle(fontSize: 22.0, fontWeight: FontWeight.bold),
               ),
             ],
           ),
@@ -127,5 +161,4 @@ class _CarteiraPageState extends State<CarteiraPage> {
       ),
     );
   }
-
 }
