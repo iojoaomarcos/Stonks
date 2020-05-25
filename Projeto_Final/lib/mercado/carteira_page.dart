@@ -33,6 +33,7 @@ class _CarteiraPageState extends State<CarteiraPage> {
         Stock stonks = new Stock(
           data[individualKey]['business'],
           data[individualKey]['stock'],
+          individualKey,
         );
 
         stockList.add(stonks);
@@ -101,7 +102,13 @@ class _CarteiraPageState extends State<CarteiraPage> {
             onDismissed: (direction) {
               // Se arrastado, remove da lista
               setState(() {
-                //items.removeAt(index);
+                FirebaseDatabase.instance
+                    .reference()
+                    .child("u1")
+                    .child(stockList[index].stockID.toString())
+                    .remove();
+
+                stockList.removeAt(index);
               });
 
               //Confirmando que item foi removido
