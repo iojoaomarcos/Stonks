@@ -3,11 +3,7 @@
 class Stock {
   String business;
   String stock;
+  String stockID;
 
-  Stock(this.business, this.stock);
-
-  // Stock.fromMap(Map<String, dynamic> data) {
-  //   business = data['business'];
-  //   stock = data['stock'];
-  // }
+  Stock(this.business, this.stock, this.stockID);
 }
