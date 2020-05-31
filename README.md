@@ -11,8 +11,7 @@ Este projeto é desenvolvido por um time de estudantes da Universidade São Fran
 * João Marcos Santos - Lider de projeto
 * Felipe Gianni - Desenvolvedor Frontend
 * João Paulo Paiva - Desenvolvedor Backend
-* Luis Bianchine  - Banco de dados
 * Gustavo Lopes - Backend focado em aplicações adicionais de Firebase
-* Guilherme Camargo - Responsável pelo GitHub e testing
+* Guilherme Camargo - Responsável pelo GitHub e Banco de Dados
 
 ###
