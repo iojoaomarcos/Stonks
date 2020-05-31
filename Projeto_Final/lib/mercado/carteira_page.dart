@@ -124,7 +124,7 @@ class _CarteiraPageState extends State<CarteiraPage> {
 
               return Dismissible(
                 key: Key(item), // Chave de identificacao de item
-
+                direction: DismissDirection.startToEnd,
                 onDismissed: (direction) {
                   // Se arrastado, remove da lista
                   setState(() {
