@@ -5,23 +5,24 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:projeto_final_acoes/mercado/stock.dart';
 
 class CarteiraPage extends StatefulWidget {
-  CarteiraPage({Key key}) : super(key: key); ////////Chave para lista Mercado
+  CarteiraPage({Key key}) : super(key: key); ////////Chave para lista Carteira
   @override
   _CarteiraPageState createState() => _CarteiraPageState();
 }
 
 class _CarteiraPageState extends State<CarteiraPage> {
+  int _selectedIndex = 1; //indice do bottombar
   List<Stock> stockList = []; //Lista das acoes do usuario
 
   Icon _cusIcon = Icon(Icons.search);
-  Widget _cusSearchBar = Text("Mercado");
+  Widget _cusSearchBar = Text("Carteira");
 
   @override
   void initState() {
     super.initState();
-/////////////////////////////////////////////
+
     DatabaseReference stocksRef =
-        FirebaseDatabase.instance.reference().child("u1");
+        FirebaseDatabase.instance.reference().child("users").child("u3");
 
     stocksRef.once().then((DataSnapshot snap) {
       var key = snap.value.keys;
@@ -33,6 +34,7 @@ class _CarteiraPageState extends State<CarteiraPage> {
         Stock stonks = new Stock(
           data[individualKey]['business'],
           data[individualKey]['stock'],
+          data[individualKey]['percentage'],
           individualKey,
         );
 
@@ -43,6 +45,16 @@ class _CarteiraPageState extends State<CarteiraPage> {
         print('Tamanho da lista de acoes: ' + stockList.length.toString());
       });
     });
+  }
+
+  Widget _porcentagem(percent) {
+    if (percent.substring(0, 1) == '-') {
+      return Text('$percent%',
+          style: TextStyle(color: Colors.red, fontSize: 18.0));
+    } else {
+      return Text('$percent%',
+          style: TextStyle(color: Colors.green, fontSize: 18.0));
+    }
   }
 
   @override
@@ -91,20 +103,23 @@ class _CarteiraPageState extends State<CarteiraPage> {
             child: Icon(Icons.add),
             backgroundColor: Colors.blueAccent,
           ),
-
           body: ListView.builder(
             itemCount: stockList.length,
             itemBuilder: (context, index) {
               final item = stockList[index].business;
+              final subtitle = stockList[index].stockID;
+              final percent = stockList[index].percentage;
 
               return Dismissible(
                 key: Key(item), // Chave de identificacao de item
+
                 onDismissed: (direction) {
                   // Se arrastado, remove da lista
                   setState(() {
                     FirebaseDatabase.instance //Remove do Firebase
                         .reference()
-                        .child("u1")
+                        .child("users")
+                        .child("u3")
                         .child(stockList[index].stockID.toString())
                         .remove();
 
@@ -118,13 +133,46 @@ class _CarteiraPageState extends State<CarteiraPage> {
                 },
                 // Quando o item eh arrastado, se mostra uma linha vermelha
                 // induzindo o significado de exclusao
-                background: Container(color: Colors.red),
-                child: ListTile(title: Text('$item')),
+                background: Container(
+                  // Quando o item é arrastado mostra uma linha vermelha, induzindo o significado de exclusão
+                  color: Colors.red,
+                  child: Align(
+                    alignment: Alignment(-0.9, 0.0),
+                    child: Icon(
+                      Icons.delete,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+                //child: ListTile(title: Text('$item')),
+
+                child: Column(
+                  children: <Widget>[
+                    ListTile(
+                      title: Text(
+                        '$item',
+                        style: TextStyle(color: Colors.black, fontSize: 20.0),
+                      ),
+                      subtitle: Padding(
+                        padding: const EdgeInsets.only(top: 8.0),
+                        child: Text(
+                          '$subtitle',
+                          style: TextStyle(
+                              color: Colors.grey[600], fontSize: 16.0),
+                        ),
+                      ),
+                      trailing: _porcentagem(percent),
+                      onTap: () {}, //Muda para página contendo detalhes da ação
+                    ),
+                    Divider(
+                      height: 2.0,
+                      color: Colors.grey,
+                    )
+                  ],
+                ),
               );
             },
           ),
-
-////////////////////////////////////////////////////////////////
           bottomNavigationBar: BottomAppBar(
             child: Row(
               mainAxisSize: MainAxisSize.max,
