@@ -5,23 +5,29 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:projeto_final_acoes/mercado/stock.dart';
 
 class CarteiraPage extends StatefulWidget {
-  CarteiraPage({Key key}) : super(key: key); ////////Chave para lista Mercado
+  CarteiraPage({Key key}) : super(key: key); ////////Chave para lista Carteira
   @override
   _CarteiraPageState createState() => _CarteiraPageState();
 }
 
 class _CarteiraPageState extends State<CarteiraPage> {
+  int _selectedIndex = 1; //indice do bottombar
   List<Stock> stockList = []; //Lista das acoes do usuario
 
   Icon _cusIcon = Icon(Icons.search);
-  Widget _cusSearchBar = Text("Mercado");
+  Widget _cusSearchBar = Text(
+    "Carteiras",
+    style: TextStyle(
+      color: Colors.white,
+    ),
+  );
 
   @override
   void initState() {
     super.initState();
-/////////////////////////////////////////////
+
     DatabaseReference stocksRef =
-        FirebaseDatabase.instance.reference().child("u1");
+        FirebaseDatabase.instance.reference().child("users").child("u3");
 
     stocksRef.once().then((DataSnapshot snap) {
       var key = snap.value.keys;
@@ -32,6 +38,7 @@ class _CarteiraPageState extends State<CarteiraPage> {
       for (var individualKey in key) {
         Stock stonks = new Stock(
           data[individualKey]['business'],
+          data[individualKey]['percentage'],
           data[individualKey]['stock'],
           individualKey,
         );
@@ -45,12 +52,29 @@ class _CarteiraPageState extends State<CarteiraPage> {
     });
   }
 
+  Widget _porcentagem(percent) {
+    if (percent.substring(0, 1) == '-') {
+      return Text('$percent%',
+          style: TextStyle(color: Colors.red, fontSize: 18.0));
+    } else {
+      return Text('$percent%',
+          style: TextStyle(color: Colors.green, fontSize: 18.0));
+    }
+  }
+
+  void _onItemTapped(int index) {
+    if (index == 0) {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => ConversorPage()),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
           title: _cusSearchBar,
-          //centerTitle: true, alinhar para a esquerda e deixar texto em branco
           backgroundColor: Colors.blueAccent,
           actions: <Widget>[
             IconButton(
@@ -73,7 +97,7 @@ class _CarteiraPageState extends State<CarteiraPage> {
                       );
                     } else {
                       this._cusIcon = Icon(Icons.search);
-                      this._cusSearchBar = Text("Mercado");
+                      this._cusSearchBar = Text("Carteiras");
                     }
                   });
                 })
@@ -91,20 +115,23 @@ class _CarteiraPageState extends State<CarteiraPage> {
             child: Icon(Icons.add),
             backgroundColor: Colors.blueAccent,
           ),
-
           body: ListView.builder(
             itemCount: stockList.length,
             itemBuilder: (context, index) {
               final item = stockList[index].business;
+              final subtitle = stockList[index].stock;
+              final percent = stockList[index].percentage;
 
               return Dismissible(
                 key: Key(item), // Chave de identificacao de item
+                direction: DismissDirection.startToEnd,
                 onDismissed: (direction) {
                   // Se arrastado, remove da lista
                   setState(() {
                     FirebaseDatabase.instance //Remove do Firebase
                         .reference()
-                        .child("u1")
+                        .child("users")
+                        .child("u3")
                         .child(stockList[index].stockID.toString())
                         .remove();
 
@@ -118,41 +145,75 @@ class _CarteiraPageState extends State<CarteiraPage> {
                 },
                 // Quando o item eh arrastado, se mostra uma linha vermelha
                 // induzindo o significado de exclusao
-                background: Container(color: Colors.red),
-                child: ListTile(title: Text('$item')),
+                background: Container(
+                  // Quando o item é arrastado mostra uma linha vermelha, induzindo o significado de exclusão
+                  color: Colors.red,
+                  child: Align(
+                    alignment: Alignment(-0.9, 0.0),
+                    child: Icon(
+                      Icons.delete,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+                //child: ListTile(title: Text('$item')),
+
+                child: Column(
+                  children: <Widget>[
+                    ListTile(
+                      title: Text('$item',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.bold,
+                          )),
+                      subtitle: Padding(
+                        padding: const EdgeInsets.only(top: 8.0),
+                        child: Text(
+                          '$subtitle',
+                          style: TextStyle(
+                              color: Colors.grey[400], fontSize: 14.0),
+                        ),
+                      ),
+                      trailing: _porcentagem(percent),
+                      onTap: () {}, //Muda para página contendo detalhes da ação
+                    ),
+                    Divider(
+                      height: 2.0,
+                      color: Colors.grey,
+                    )
+                  ],
+                ),
               );
             },
           ),
-
-////////////////////////////////////////////////////////////////
-          bottomNavigationBar: BottomAppBar(
-            child: Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                Container(
-                  child: IconButton(
-                    icon: Icon(Icons.attach_money),
-                    onPressed: () {
-                      Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(
-                            builder: (context) => ConversorPage()),
-                      );
-                    },
-                  ),
+          bottomNavigationBar: BottomNavigationBar(
+            backgroundColor: Colors.blue[600],
+            items: const <BottomNavigationBarItem>[
+              BottomNavigationBarItem(
+                icon: Icon(
+                  Icons.attach_money,
+                  color: Colors.black,
                 ),
-                Container(
-                  child: IconButton(
-                    icon: Icon(Icons.equalizer),
-                    onPressed: () {
-                      Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(builder: (context) => CarteiraPage()),
-                      );
-                    },
-                  ),
-                )
-              ],
-            ),
+                title: Text(
+                  'Conversor',
+                  style: TextStyle(color: Colors.black, fontSize: 18.0),
+                ),
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(
+                  Icons.equalizer,
+                  color: Colors.white,
+                ),
+                title: Text(
+                  'Carteira',
+                  style: TextStyle(color: Colors.white, fontSize: 18.0),
+                ),
+              ),
+            ],
+            currentIndex: _selectedIndex,
+            selectedItemColor: Colors.white,
+            onTap: _onItemTapped,
           ),
         ));
   }
