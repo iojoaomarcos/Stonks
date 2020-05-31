@@ -6,5 +6,5 @@ class Stock {
   String stockID;
   String percentage;
 
-  Stock(this.business, this.stockID, this.percentage, this.stock);
+  Stock(this.business, this.percentage, this.stock, this.stockID);
 }

@@ -15,7 +15,12 @@ class _CarteiraPageState extends State<CarteiraPage> {
   List<Stock> stockList = []; //Lista das acoes do usuario
 
   Icon _cusIcon = Icon(Icons.search);
-  Widget _cusSearchBar = Text("Carteira");
+  Widget _cusSearchBar = Text(
+    "Carteiras",
+    style: TextStyle(
+      color: Colors.white,
+    ),
+  );
 
   @override
   void initState() {
@@ -33,8 +38,8 @@ class _CarteiraPageState extends State<CarteiraPage> {
       for (var individualKey in key) {
         Stock stonks = new Stock(
           data[individualKey]['business'],
-          data[individualKey]['stock'],
           data[individualKey]['percentage'],
+          data[individualKey]['stock'],
           individualKey,
         );
 
@@ -57,12 +62,19 @@ class _CarteiraPageState extends State<CarteiraPage> {
     }
   }
 
+  void _onItemTapped(int index) {
+    if (index == 0) {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => ConversorPage()),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
           title: _cusSearchBar,
-          //centerTitle: true, alinhar para a esquerda e deixar texto em branco
           backgroundColor: Colors.blueAccent,
           actions: <Widget>[
             IconButton(
@@ -85,7 +97,7 @@ class _CarteiraPageState extends State<CarteiraPage> {
                       );
                     } else {
                       this._cusIcon = Icon(Icons.search);
-                      this._cusSearchBar = Text("Mercado");
+                      this._cusSearchBar = Text("Carteiras");
                     }
                   });
                 })
@@ -107,7 +119,7 @@ class _CarteiraPageState extends State<CarteiraPage> {
             itemCount: stockList.length,
             itemBuilder: (context, index) {
               final item = stockList[index].business;
-              final subtitle = stockList[index].stockID;
+              final subtitle = stockList[index].stock;
               final percent = stockList[index].percentage;
 
               return Dismissible(
@@ -149,16 +161,18 @@ class _CarteiraPageState extends State<CarteiraPage> {
                 child: Column(
                   children: <Widget>[
                     ListTile(
-                      title: Text(
-                        '$item',
-                        style: TextStyle(color: Colors.black, fontSize: 20.0),
-                      ),
+                      title: Text('$item',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.bold,
+                          )),
                       subtitle: Padding(
                         padding: const EdgeInsets.only(top: 8.0),
                         child: Text(
                           '$subtitle',
                           style: TextStyle(
-                              color: Colors.grey[600], fontSize: 16.0),
+                              color: Colors.grey[400], fontSize: 14.0),
                         ),
                       ),
                       trailing: _porcentagem(percent),
@@ -173,34 +187,33 @@ class _CarteiraPageState extends State<CarteiraPage> {
               );
             },
           ),
-          bottomNavigationBar: BottomAppBar(
-            child: Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                Container(
-                  child: IconButton(
-                    icon: Icon(Icons.attach_money),
-                    onPressed: () {
-                      Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(
-                            builder: (context) => ConversorPage()),
-                      );
-                    },
-                  ),
+          bottomNavigationBar: BottomNavigationBar(
+            backgroundColor: Colors.blue[600],
+            items: const <BottomNavigationBarItem>[
+              BottomNavigationBarItem(
+                icon: Icon(
+                  Icons.attach_money,
+                  color: Colors.black,
                 ),
-                Container(
-                  child: IconButton(
-                    icon: Icon(Icons.equalizer),
-                    onPressed: () {
-                      Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(builder: (context) => CarteiraPage()),
-                      );
-                    },
-                  ),
-                )
-              ],
-            ),
+                title: Text(
+                  'Conversor',
+                  style: TextStyle(color: Colors.black, fontSize: 18.0),
+                ),
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(
+                  Icons.equalizer,
+                  color: Colors.white,
+                ),
+                title: Text(
+                  'Carteira',
+                  style: TextStyle(color: Colors.white, fontSize: 18.0),
+                ),
+              ),
+            ],
+            currentIndex: _selectedIndex,
+            selectedItemColor: Colors.white,
+            onTap: _onItemTapped,
           ),
         ));
   }
