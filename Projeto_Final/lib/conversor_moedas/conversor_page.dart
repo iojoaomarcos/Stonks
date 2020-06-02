@@ -29,6 +29,8 @@ class _ConversorPageState extends State<ConversorPage> {
   double dolar;
   double euro;
 
+  String dropdownValue = 'Real';
+
   void _clearAll() {
     realController.text = "";
     dolarController.text = "";
@@ -138,9 +140,55 @@ class _ConversorPageState extends State<ConversorPage> {
                         buildTextField(
                             "Reais", "R\$", realController, _realChanged),
                         Divider(),
+                        DropdownButton<String>(
+                          value: dropdownValue,
+                          icon: Icon(Icons.arrow_downward),
+                          iconSize: 24,
+                          elevation: 16,
+                          style: TextStyle(color: Colors.black45),
+                          underline: Container(
+                            height: 2,
+                            color: Colors.black45,
+                          ),
+                          onChanged: (String newValue) {
+                            setState(() {
+                              dropdownValue = newValue;
+                            });
+                          },
+                          items: <String>['Real', 'Dolar', 'Euro', 'Bitcoin']
+                              .map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
+                        ),
                         buildTextField(
                             "Dólares", "US\$", dolarController, _dolarChanged),
                         Divider(),
+                        DropdownButton<String>(
+                          value: dropdownValue,
+                          icon: Icon(Icons.arrow_downward),
+                          iconSize: 24,
+                          elevation: 16,
+                          style: TextStyle(color: Colors.black45),
+                          underline: Container(
+                            height: 2,
+                            color: Colors.black45,
+                          ),
+                          onChanged: (String newValue) {
+                            setState(() {
+                              dropdownValue = newValue;
+                            });
+                          },
+                          items: <String>['Real', 'Dolar', 'Euro', 'Bitcoin']
+                              .map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
+                        ),
                       ],
                     ),
                   );
