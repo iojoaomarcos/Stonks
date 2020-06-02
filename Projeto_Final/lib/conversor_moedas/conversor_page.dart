@@ -1,6 +1,8 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
 import 'package:http/http.dart' as http;
+import 'package:projeto_final_acoes/conversor_moedas/currencies.dart';
 import 'dart:async';
 import 'dart:convert';
 
@@ -20,6 +22,9 @@ class ConversorPage extends StatefulWidget {
 
 class _ConversorPageState extends State<ConversorPage> {
   int _selectedIndex = 0; //indice do bottombar
+
+  List<Currency> currencyList = [];
+
   final realController = TextEditingController();
   final dolarController = TextEditingController();
 
@@ -30,6 +35,35 @@ class _ConversorPageState extends State<ConversorPage> {
   double euro;
 
   String dropdownValue = 'Real';
+
+  @override
+  void initState() {
+    super.initState();
+
+    DatabaseReference stocksRef =
+        FirebaseDatabase.instance.reference().child("Currency");
+
+    stocksRef.once().then((DataSnapshot snap) {
+      var key = snap.value.keys;
+      var data = snap.value;
+
+      currencyList.clear();
+
+      for (var individualKey in key) {
+        Currency stonks = new Currency(
+          data[individualKey]['COD'],
+          data[individualKey]['Nome'],
+          individualKey,
+        );
+
+        currencyList.add(stonks);
+      }
+
+      setState(() {
+        print('Tamanho da lista de moedas: ' + currencyList.length.toString());
+      });
+    });
+  }
 
   void _clearAll() {
     realController.text = "";
