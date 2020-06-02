@@ -24,6 +24,7 @@ class _ConversorPageState extends State<ConversorPage> {
   int _selectedIndex = 0; //indice do bottombar
 
   List<Currency> currencyList = [];
+  List<String> moedasCod = [];
 
   final realController = TextEditingController();
   final dolarController = TextEditingController();
@@ -34,7 +35,8 @@ class _ConversorPageState extends State<ConversorPage> {
   double dolar;
   double euro;
 
-  String dropdownValue = 'Real';
+  String dropdownValue = 'BRL';
+  String dropdownValue2 = 'Dolar';
 
   @override
   void initState() {
@@ -57,6 +59,8 @@ class _ConversorPageState extends State<ConversorPage> {
         );
 
         currencyList.add(stonks);
+        moedasCod.add(data[individualKey]['COD']);
+        /////////////////////////////////////////////////////////////////////////////
       }
 
       setState(() {
@@ -156,7 +160,7 @@ class _ConversorPageState extends State<ConversorPage> {
                         Padding(
                           padding: EdgeInsets.all(10.0),
                           child: Text(
-                            "$_moedaReal Brazilian Real equivale",
+                            "$_moedaReal Reais Brasileiros equivalem a",
                             style:
                                 TextStyle(color: Colors.grey, fontSize: 20.0),
                           ),
@@ -164,7 +168,7 @@ class _ConversorPageState extends State<ConversorPage> {
                         Padding(
                           padding: EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 70.0),
                           child: Text(
-                            "$_moedaDolar United States Dollar",
+                            "$_moedaDolar Dolares Americanos",
                             style: TextStyle(
                                 color: Colors.black,
                                 fontWeight: FontWeight.bold,
@@ -189,7 +193,7 @@ class _ConversorPageState extends State<ConversorPage> {
                               dropdownValue = newValue;
                             });
                           },
-                          items: <String>['Real', 'Dolar', 'Euro', 'Bitcoin']
+                          items: moedasCod
                               .map<DropdownMenuItem<String>>((String value) {
                             return DropdownMenuItem<String>(
                               value: value,
@@ -201,7 +205,7 @@ class _ConversorPageState extends State<ConversorPage> {
                             "Dólares", "US\$", dolarController, _dolarChanged),
                         Divider(),
                         DropdownButton<String>(
-                          value: dropdownValue,
+                          value: dropdownValue2,
                           icon: Icon(Icons.arrow_downward),
                           iconSize: 24,
                           elevation: 16,
