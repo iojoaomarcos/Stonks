@@ -8,107 +8,152 @@ import 'dart:convert';
 
 import 'package:projeto_final_acoes/mercado/carteira_page.dart';
 
-const request = "https://api.hgbrasil.com/finance?format=json&key=49e7344b";
-
-Future<Map> getData() async {
-  http.Response response = await http.get(request);
-  return json.decode(response.body);
-}
-
 class ConversorPage extends StatefulWidget {
   @override
   _ConversorPageState createState() => _ConversorPageState();
 }
 
 class _ConversorPageState extends State<ConversorPage> {
+
+  //variáveis de inicio
   int _selectedIndex = 0; //indice do bottombar
+  String _dropdownValue  = 'BRL';
+  String _dropdownValue2 = 'USD';
+  String _moedaNome      = 'Brazilian Real';
+  String _moedaNome2     = 'United States Dollar';
+  String _moedaSymbol    = 'R\$';
+  String _moedaSymbol2   = '\$';
 
-  List<Currency> currencyList = [];
-  List<String> moedasCod = [];
+  List<String> moedasId = []; //lista dos IDs das moedas
 
-  final realController = TextEditingController();
-  final dolarController = TextEditingController();
+  final moeda1Controller = TextEditingController();
+  final moeda2Controller = TextEditingController();
 
-  String _moedaReal = "0.0";
-  String _moedaDolar = "0.0";
+  String _moeda1 = "0.0";
+  String _moeda2 = "0.0";
 
   double dolar;
-  double euro;
-
-  String dropdownValue = 'BRL';
-  String dropdownValue2 = 'Dolar';
 
   @override
   void initState() {
     super.initState();
 
-    DatabaseReference stocksRef =
-        FirebaseDatabase.instance.reference().child("Currency");
+    DatabaseReference moedasRef = FirebaseDatabase.instance.reference().child("Currency");
 
-    stocksRef.once().then((DataSnapshot snap) {
-      var key = snap.value.keys;
+    moedasRef.once().then((DataSnapshot snap) {
+      var key  = snap.value.keys;
       var data = snap.value;
 
-      currencyList.clear();
+      moedasId.clear();
 
       for (var individualKey in key) {
-        Currency stonks = new Currency(
-          data[individualKey]['COD'],
-          data[individualKey]['Nome'],
+        Currency currency = new Currency(
+          data[individualKey]['currencyName'],
+          data[individualKey]['currencySymbol'],
+          data[individualKey]['id'],
           individualKey,
         );
 
-        currencyList.add(stonks);
-        moedasCod.add(data[individualKey]['COD']);
-        /////////////////////////////////////////////////////////////////////////////
+        moedasId.add(data[individualKey]['id']);
       }
 
       setState(() {
-        print('Tamanho da lista de moedas: ' + currencyList.length.toString());
+        moedasId.sort();
       });
     });
   }
 
+  //função para mudar a moeda escrita em tela
+  void _changedMoeda(String newValue, int campo){
+    _clearAll();
+    if(campo == 1){
+      DatabaseReference coinRef = FirebaseDatabase.instance.reference().child("Currency").child(newValue);
+
+      coinRef.once().then((DataSnapshot snap) {
+        var data = snap.value;
+
+        setState(() {
+          _dropdownValue = newValue;
+          _moedaNome     = data['currencyName'];
+          _moedaSymbol   = data['currencySymbol'];
+        });
+      });
+    }
+    else{
+      DatabaseReference coinRef = FirebaseDatabase.instance.reference().child("Currency").child(newValue);
+
+      coinRef.once().then((DataSnapshot snap) {
+        var data = snap.value;
+
+        setState(() {
+          _dropdownValue2 = newValue;
+          _moedaNome2     = data['currencyName'];
+          _moedaSymbol2   = data['currencySymbol'];
+        });
+      });
+    }
+  }
+
   void _clearAll() {
-    realController.text = "";
-    dolarController.text = "";
+    moeda1Controller.text = "";
+    moeda2Controller.text = "";
 
     setState(() {
-      _moedaReal = "0.0";
-      _moedaDolar = "0.0";
+      _moeda1 = "0.0";
+      _moeda2 = "0.0";
     });
   }
+  
+  Future<Map> getData(request) async {
+    http.Response response = await http.get(request);
+    return json.decode(response.body);
+  }
 
-  void _realChanged(String text) {
+  void _moeda1Changed(String text) {
     if (text.isEmpty) {
       _clearAll();
       return;
     }
 
-    double real = double.parse(text);
-    dolarController.text = (real / dolar).toStringAsFixed(2);
+    final relation = _dropdownValue+"_"+_dropdownValue2;
+    final request = "https://free.currconv.com/api/v7/convert?q="+relation+"&compact=ultra&apiKey=b22baa40c5f7f0496958";
 
-    setState(() {
-      _moedaReal = text;
-      _moedaDolar = (real / dolar).toStringAsFixed(2);
+    Future<Map> response = getData(request);
+    
+    response.then((snap) {
+      double coin1 = double.parse(text);
+      moeda2Controller.text = (coin1*snap[relation]).toStringAsFixed(2);
+
+      setState(() {
+        _moeda1 = text;
+        _moeda2 = (coin1*snap[relation]).toStringAsFixed(2);
+      });
     });
   }
 
-  void _dolarChanged(String text) {
+  void _moeda2Changed(String text) {
     if (text.isEmpty) {
       _clearAll();
       return;
     }
 
-    double dolar = double.parse(text);
-    realController.text = (dolar * this.dolar).toStringAsFixed(2);
+    final relation = _dropdownValue+"_"+_dropdownValue2;
+    final request = "https://free.currconv.com/api/v7/convert?q="+relation+"&compact=ultra&apiKey=b22baa40c5f7f0496958";
 
-    setState(() {
-      _moedaReal = (dolar * this.dolar).toStringAsFixed(2);
-      _moedaDolar = text;
+    Future<Map> response = getData(request);
+    
+    response.then((snap) {
+      double coin2 = double.parse(text);
+      moeda1Controller.text = (coin2 / snap[relation]).toStringAsFixed(2);
+
+      setState(() {
+        _moeda1 = (coin2 / snap[relation]).toStringAsFixed(2);
+        _moeda2 = text;
+      });
     });
   }
 
+  //bottomNavigationBar function
   void _onItemTapped(int index) {
     if (index == 1) {
       Navigator.of(context).pushReplacement(
@@ -129,110 +174,106 @@ class _ConversorPageState extends State<ConversorPage> {
         backgroundColor: Colors.blueAccent,
         elevation: 20.0,
       ),
-      body: FutureBuilder<Map>(
-          future: getData(),
-          builder: (context, snapshot) {
-            switch (snapshot.connectionState) {
-              case ConnectionState.none:
-              case ConnectionState.waiting:
-                return Center(
-                    child: Text(
-                  "Loading...",
-                  style: TextStyle(color: Colors.blueAccent, fontSize: 20.0),
-                  textAlign: TextAlign.center,
-                ));
-              default:
-                if (snapshot.hasError) {
-                  return Center(
-                      child: Text(
-                    "Error loading data :( ",
-                    style: TextStyle(color: Colors.blueAccent, fontSize: 20.0),
-                    textAlign: TextAlign.center,
-                  ));
-                } else {
-                  dolar = snapshot.data["results"]["currencies"]["USD"]["buy"];
-                  euro = snapshot.data["results"]["currencies"]["EUR"]["buy"];
-                  return SingleChildScrollView(
-                    padding: EdgeInsets.all(10.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: <Widget>[
-                        Padding(
-                          padding: EdgeInsets.all(10.0),
-                          child: Text(
-                            "$_moedaReal Reais Brasileiros equivalem a",
-                            style:
-                                TextStyle(color: Colors.grey, fontSize: 20.0),
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 70.0),
-                          child: Text(
-                            "$_moedaDolar Dolares Americanos",
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 50.0),
-                          ),
-                        ),
-                        buildTextField(
-                            "Reais", "R\$", realController, _realChanged),
-                        Divider(),
-                        DropdownButton<String>(
-                          value: dropdownValue,
-                          icon: Icon(Icons.arrow_downward),
-                          iconSize: 24,
-                          elevation: 16,
-                          style: TextStyle(color: Colors.black45),
-                          underline: Container(
-                            height: 2,
-                            color: Colors.black45,
-                          ),
-                          onChanged: (String newValue) {
-                            setState(() {
-                              dropdownValue = newValue;
-                            });
-                          },
-                          items: moedasCod
-                              .map<DropdownMenuItem<String>>((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(value),
-                            );
-                          }).toList(),
-                        ),
-                        buildTextField(
-                            "Dólares", "US\$", dolarController, _dolarChanged),
-                        Divider(),
-                        DropdownButton<String>(
-                          value: dropdownValue2,
-                          icon: Icon(Icons.arrow_downward),
-                          iconSize: 24,
-                          elevation: 16,
-                          style: TextStyle(color: Colors.black45),
-                          underline: Container(
-                            height: 2,
-                            color: Colors.black45,
-                          ),
-                          onChanged: (String newValue) {
-                            setState(() {
-                              dropdownValue = newValue;
-                            });
-                          },
-                          items: <String>['Real', 'Dolar', 'Euro', 'Bitcoin']
-                              .map<DropdownMenuItem<String>>((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(value),
-                            );
-                          }).toList(),
-                        ),
-                      ],
+      body: SingleChildScrollView(
+        padding: EdgeInsets.all(10.0),
+        child: Column(
+          children: <Widget>[
+            Padding(
+              padding: EdgeInsets.all(10.0),
+              child: Text(
+                "$_moeda1 $_moedaNome equivalem a",
+                style:TextStyle(color: Colors.grey, fontSize: 20.0, ),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 70.0),
+              child: Text(
+                "$_moeda2 $_moedaNome2",
+                style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 50.0),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(bottom:20.0),
+              child: Row(
+                children: <Widget>[
+                  Container(
+                    width: 300.0,
+                    child: TextField(
+                      controller: moeda1Controller,
+                      decoration: InputDecoration(
+                        labelText: "$_moedaNome",
+                        labelStyle: TextStyle(color: Colors.blueAccent),
+                        border: OutlineInputBorder(),
+                        prefixText: "$_moedaSymbol",
+                      ),
+                      style: TextStyle(color: Colors.blueAccent, fontSize: 20.0,),
+                      onChanged: _moeda1Changed,
+                      keyboardType: TextInputType.number,
                     ),
-                  );
-                }
-            }
-          }),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(left: 10.0),
+                    child: DropdownButton<String>(
+                      value: _dropdownValue,
+                      icon: Icon(Icons.arrow_downward),
+                      iconSize: 24,
+                      style: TextStyle(color: Colors.black45, fontSize: 16.0),
+                      underline: Container(height: 2,color: Colors.black45,),
+                      onChanged: (String newValue) {
+                        _changedMoeda(newValue, 1);
+                      },
+                      items: moedasId.map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Row(
+              children: <Widget>[
+                Container(
+                  width: 300.0,
+                  child: TextField(
+                    controller: moeda2Controller,
+                    decoration: InputDecoration(
+                      labelText: "$_moedaNome2",
+                      labelStyle: TextStyle(color: Colors.blueAccent),
+                      border: OutlineInputBorder(),
+                      prefixText: "$_moedaSymbol2",
+                    ),
+                    style: TextStyle(color: Colors.blueAccent, fontSize: 20.0,),
+                    onChanged: _moeda2Changed,
+                    keyboardType: TextInputType.number,
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(left: 10.0),
+                  child: DropdownButton<String>(
+                    value: _dropdownValue2,
+                    icon: Icon(Icons.arrow_downward),
+                    iconSize: 24,
+                    style: TextStyle(color: Colors.black45, fontSize: 16.0),
+                    underline: Container(height: 2,color: Colors.black45,),
+                    onChanged: (String newValue) {
+                      _changedMoeda(newValue, 2);
+                    },
+                    items: moedasId.map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Colors.blue[600],
         items: const <BottomNavigationBarItem>[
@@ -263,20 +304,4 @@ class _ConversorPageState extends State<ConversorPage> {
       ),
     );
   }
-}
-
-Widget buildTextField(
-    String label, String prefix, TextEditingController c, Function f) {
-  return TextField(
-    controller: c,
-    decoration: InputDecoration(
-      labelText: label,
-      labelStyle: TextStyle(color: Colors.blueAccent),
-      border: OutlineInputBorder(),
-      prefixText: prefix,
-    ),
-    style: TextStyle(color: Colors.blueAccent, fontSize: 20.0),
-    onChanged: f,
-    keyboardType: TextInputType.number,
-  );
 }
