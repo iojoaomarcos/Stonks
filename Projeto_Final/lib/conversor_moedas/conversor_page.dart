@@ -1,6 +1,8 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
 import 'package:http/http.dart' as http;
+import 'package:projeto_final_acoes/conversor_moedas/currencies.dart';
 import 'dart:async';
 import 'dart:convert';
 
@@ -20,6 +22,10 @@ class ConversorPage extends StatefulWidget {
 
 class _ConversorPageState extends State<ConversorPage> {
   int _selectedIndex = 0; //indice do bottombar
+
+  List<Currency> currencyList = [];
+  List<String> moedasCod = [];
+
   final realController = TextEditingController();
   final dolarController = TextEditingController();
 
@@ -28,6 +34,40 @@ class _ConversorPageState extends State<ConversorPage> {
 
   double dolar;
   double euro;
+
+  String dropdownValue = 'BRL';
+  String dropdownValue2 = 'Dolar';
+
+  @override
+  void initState() {
+    super.initState();
+
+    DatabaseReference stocksRef =
+        FirebaseDatabase.instance.reference().child("Currency");
+
+    stocksRef.once().then((DataSnapshot snap) {
+      var key = snap.value.keys;
+      var data = snap.value;
+
+      currencyList.clear();
+
+      for (var individualKey in key) {
+        Currency stonks = new Currency(
+          data[individualKey]['COD'],
+          data[individualKey]['Nome'],
+          individualKey,
+        );
+
+        currencyList.add(stonks);
+        moedasCod.add(data[individualKey]['COD']);
+        /////////////////////////////////////////////////////////////////////////////
+      }
+
+      setState(() {
+        print('Tamanho da lista de moedas: ' + currencyList.length.toString());
+      });
+    });
+  }
 
   void _clearAll() {
     realController.text = "";
@@ -120,7 +160,7 @@ class _ConversorPageState extends State<ConversorPage> {
                         Padding(
                           padding: EdgeInsets.all(10.0),
                           child: Text(
-                            "$_moedaReal Brazilian Real equivale",
+                            "$_moedaReal Reais Brasileiros equivalem a",
                             style:
                                 TextStyle(color: Colors.grey, fontSize: 20.0),
                           ),
@@ -128,7 +168,7 @@ class _ConversorPageState extends State<ConversorPage> {
                         Padding(
                           padding: EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 70.0),
                           child: Text(
-                            "$_moedaDolar United States Dollar",
+                            "$_moedaDolar Dolares Americanos",
                             style: TextStyle(
                                 color: Colors.black,
                                 fontWeight: FontWeight.bold,
@@ -138,9 +178,55 @@ class _ConversorPageState extends State<ConversorPage> {
                         buildTextField(
                             "Reais", "R\$", realController, _realChanged),
                         Divider(),
+                        DropdownButton<String>(
+                          value: dropdownValue,
+                          icon: Icon(Icons.arrow_downward),
+                          iconSize: 24,
+                          elevation: 16,
+                          style: TextStyle(color: Colors.black45),
+                          underline: Container(
+                            height: 2,
+                            color: Colors.black45,
+                          ),
+                          onChanged: (String newValue) {
+                            setState(() {
+                              dropdownValue = newValue;
+                            });
+                          },
+                          items: moedasCod
+                              .map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
+                        ),
                         buildTextField(
                             "Dólares", "US\$", dolarController, _dolarChanged),
                         Divider(),
+                        DropdownButton<String>(
+                          value: dropdownValue2,
+                          icon: Icon(Icons.arrow_downward),
+                          iconSize: 24,
+                          elevation: 16,
+                          style: TextStyle(color: Colors.black45),
+                          underline: Container(
+                            height: 2,
+                            color: Colors.black45,
+                          ),
+                          onChanged: (String newValue) {
+                            setState(() {
+                              dropdownValue = newValue;
+                            });
+                          },
+                          items: <String>['Real', 'Dolar', 'Euro', 'Bitcoin']
+                              .map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
+                        ),
                       ],
                     ),
                   );
