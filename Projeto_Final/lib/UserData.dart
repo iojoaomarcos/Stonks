@@ -1,3 +1,3 @@
 library stonks.globals;
 
-String userID = 'hello world';
+String userID = '';

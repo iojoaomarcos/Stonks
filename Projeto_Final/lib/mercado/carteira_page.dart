@@ -29,8 +29,15 @@ class _CarteiraPageState extends State<CarteiraPage> {
 
     print('O usuario atual tem o seguinte ID: ' + globals.userID);
 
+    FirebaseDatabase.instance
+        .reference()
+        .child("users")
+        .child(globals.userID)
+        .set({"user": globals.userID});
+
     DatabaseReference stocksRef =
         FirebaseDatabase.instance.reference().child("users").child("u3");
+    //.child(globals.userID.toString());////////////////////////////////////////
 
     stocksRef.once().then((DataSnapshot snap) {
       var key = snap.value.keys;
@@ -134,6 +141,7 @@ class _CarteiraPageState extends State<CarteiraPage> {
                     FirebaseDatabase.instance //Remove do Firebase
                         .reference()
                         .child("users")
+                        //.child(globals.userID.toString())/////////////////////////////////
                         .child("u3")
                         .child(stockList[index].stockID.toString())
                         .remove();

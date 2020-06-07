@@ -32,7 +32,7 @@ class AuthService {
 
     print("user: " + user.uid);
 
-    globals.userID = user.uid;
+    globals.userID = user.uid.toString();
 
     return user.uid;
   }
