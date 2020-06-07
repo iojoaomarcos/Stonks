@@ -14,15 +14,14 @@ class ConversorPage extends StatefulWidget {
 }
 
 class _ConversorPageState extends State<ConversorPage> {
-
   //variáveis de inicio
   int _selectedIndex = 0; //indice do bottombar
-  String _dropdownValue  = 'BRL';
+  String _dropdownValue = 'BRL';
   String _dropdownValue2 = 'USD';
-  String _moedaNome      = 'Brazilian Real';
-  String _moedaNome2     = 'United States Dollar';
-  String _moedaSymbol    = 'R\$';
-  String _moedaSymbol2   = '\$';
+  String _moedaNome = 'Brazilian Real';
+  String _moedaNome2 = 'United States Dollar';
+  String _moedaSymbol = 'R\$';
+  String _moedaSymbol2 = '\$';
 
   List<String> moedasId = []; //lista dos IDs das moedas
 
@@ -38,10 +37,11 @@ class _ConversorPageState extends State<ConversorPage> {
   void initState() {
     super.initState();
 
-    DatabaseReference moedasRef = FirebaseDatabase.instance.reference().child("Currency");
+    DatabaseReference moedasRef =
+        FirebaseDatabase.instance.reference().child("Currency");
 
     moedasRef.once().then((DataSnapshot snap) {
-      var key  = snap.value.keys;
+      var key = snap.value.keys;
       var data = snap.value;
 
       moedasId.clear();
@@ -64,31 +64,36 @@ class _ConversorPageState extends State<ConversorPage> {
   }
 
   //função para mudar a moeda escrita em tela
-  void _changedMoeda(String newValue, int campo){
+  void _changedMoeda(String newValue, int campo) {
     _clearAll();
-    if(campo == 1){
-      DatabaseReference coinRef = FirebaseDatabase.instance.reference().child("Currency").child(newValue);
+    if (campo == 1) {
+      DatabaseReference coinRef = FirebaseDatabase.instance
+          .reference()
+          .child("Currency")
+          .child(newValue);
 
       coinRef.once().then((DataSnapshot snap) {
         var data = snap.value;
 
         setState(() {
           _dropdownValue = newValue;
-          _moedaNome     = data['currencyName'];
-          _moedaSymbol   = data['currencySymbol'];
+          _moedaNome = data['currencyName'];
+          _moedaSymbol = data['currencySymbol'];
         });
       });
-    }
-    else{
-      DatabaseReference coinRef = FirebaseDatabase.instance.reference().child("Currency").child(newValue);
+    } else {
+      DatabaseReference coinRef = FirebaseDatabase.instance
+          .reference()
+          .child("Currency")
+          .child(newValue);
 
       coinRef.once().then((DataSnapshot snap) {
         var data = snap.value;
 
         setState(() {
           _dropdownValue2 = newValue;
-          _moedaNome2     = data['currencyName'];
-          _moedaSymbol2   = data['currencySymbol'];
+          _moedaNome2 = data['currencyName'];
+          _moedaSymbol2 = data['currencySymbol'];
         });
       });
     }
@@ -103,7 +108,7 @@ class _ConversorPageState extends State<ConversorPage> {
       _moeda2 = "0.0";
     });
   }
-  
+
   Future<Map> getData(request) async {
     http.Response response = await http.get(request);
     return json.decode(response.body);
@@ -115,18 +120,20 @@ class _ConversorPageState extends State<ConversorPage> {
       return;
     }
 
-    final relation = _dropdownValue+"_"+_dropdownValue2;
-    final request = "https://free.currconv.com/api/v7/convert?q="+relation+"&compact=ultra&apiKey=b22baa40c5f7f0496958";
+    final relation = _dropdownValue + "_" + _dropdownValue2;
+    final request = "https://free.currconv.com/api/v7/convert?q=" +
+        relation +
+        "&compact=ultra&apiKey=b22baa40c5f7f0496958";
 
     Future<Map> response = getData(request);
-    
+
     response.then((snap) {
       double coin1 = double.parse(text);
-      moeda2Controller.text = (coin1*snap[relation]).toStringAsFixed(2);
+      moeda2Controller.text = (coin1 * snap[relation]).toStringAsFixed(2);
 
       setState(() {
         _moeda1 = text;
-        _moeda2 = (coin1*snap[relation]).toStringAsFixed(2);
+        _moeda2 = (coin1 * snap[relation]).toStringAsFixed(2);
       });
     });
   }
@@ -137,11 +144,13 @@ class _ConversorPageState extends State<ConversorPage> {
       return;
     }
 
-    final relation = _dropdownValue+"_"+_dropdownValue2;
-    final request = "https://free.currconv.com/api/v7/convert?q="+relation+"&compact=ultra&apiKey=b22baa40c5f7f0496958";
+    final relation = _dropdownValue + "_" + _dropdownValue2;
+    final request = "https://free.currconv.com/api/v7/convert?q=" +
+        relation +
+        "&compact=ultra&apiKey=b22baa40c5f7f0496958";
 
     Future<Map> response = getData(request);
-    
+
     response.then((snap) {
       double coin2 = double.parse(text);
       moeda1Controller.text = (coin2 / snap[relation]).toStringAsFixed(2);
@@ -182,22 +191,28 @@ class _ConversorPageState extends State<ConversorPage> {
               padding: EdgeInsets.all(10.0),
               child: Text(
                 "$_moeda1 $_moedaNome equivalem a",
-                style:TextStyle(color: Colors.grey, fontSize: 20.0, ),
+                style: TextStyle(
+                  color: Colors.grey,
+                  fontSize: 20.0,
+                ),
               ),
             ),
             Padding(
               padding: EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 70.0),
               child: Text(
                 "$_moeda2 $_moedaNome2",
-                style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 50.0),
+                style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 50.0),
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(bottom:20.0),
+              padding: const EdgeInsets.only(bottom: 20.0),
               child: Row(
                 children: <Widget>[
                   Container(
-                    width: 300.0,
+                    width: 250.0,
                     child: TextField(
                       controller: moeda1Controller,
                       decoration: InputDecoration(
@@ -206,7 +221,10 @@ class _ConversorPageState extends State<ConversorPage> {
                         border: OutlineInputBorder(),
                         prefixText: "$_moedaSymbol",
                       ),
-                      style: TextStyle(color: Colors.blueAccent, fontSize: 20.0,),
+                      style: TextStyle(
+                        color: Colors.blueAccent,
+                        fontSize: 20.0,
+                      ),
                       onChanged: _moeda1Changed,
                       keyboardType: TextInputType.number,
                     ),
@@ -218,11 +236,15 @@ class _ConversorPageState extends State<ConversorPage> {
                       icon: Icon(Icons.arrow_downward),
                       iconSize: 24,
                       style: TextStyle(color: Colors.black45, fontSize: 16.0),
-                      underline: Container(height: 2,color: Colors.black45,),
+                      underline: Container(
+                        height: 2,
+                        color: Colors.black45,
+                      ),
                       onChanged: (String newValue) {
                         _changedMoeda(newValue, 1);
                       },
-                      items: moedasId.map<DropdownMenuItem<String>>((String value) {
+                      items: moedasId
+                          .map<DropdownMenuItem<String>>((String value) {
                         return DropdownMenuItem<String>(
                           value: value,
                           child: Text(value),
@@ -236,7 +258,7 @@ class _ConversorPageState extends State<ConversorPage> {
             Row(
               children: <Widget>[
                 Container(
-                  width: 300.0,
+                  width: 250.0,
                   child: TextField(
                     controller: moeda2Controller,
                     decoration: InputDecoration(
@@ -245,7 +267,10 @@ class _ConversorPageState extends State<ConversorPage> {
                       border: OutlineInputBorder(),
                       prefixText: "$_moedaSymbol2",
                     ),
-                    style: TextStyle(color: Colors.blueAccent, fontSize: 20.0,),
+                    style: TextStyle(
+                      color: Colors.blueAccent,
+                      fontSize: 20.0,
+                    ),
                     onChanged: _moeda2Changed,
                     keyboardType: TextInputType.number,
                   ),
@@ -257,11 +282,15 @@ class _ConversorPageState extends State<ConversorPage> {
                     icon: Icon(Icons.arrow_downward),
                     iconSize: 24,
                     style: TextStyle(color: Colors.black45, fontSize: 16.0),
-                    underline: Container(height: 2,color: Colors.black45,),
+                    underline: Container(
+                      height: 2,
+                      color: Colors.black45,
+                    ),
                     onChanged: (String newValue) {
                       _changedMoeda(newValue, 2);
                     },
-                    items: moedasId.map<DropdownMenuItem<String>>((String value) {
+                    items:
+                        moedasId.map<DropdownMenuItem<String>>((String value) {
                       return DropdownMenuItem<String>(
                         value: value,
                         child: Text(value),
