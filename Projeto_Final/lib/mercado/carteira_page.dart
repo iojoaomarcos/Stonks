@@ -3,6 +3,7 @@ import 'package:projeto_final_acoes/conversor_moedas/conversor_page.dart';
 import 'package:projeto_final_acoes/mercado/buscaAcao_page.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:projeto_final_acoes/mercado/stock.dart';
+import 'package:projeto_final_acoes/UserData.dart' as globals;
 
 class CarteiraPage extends StatefulWidget {
   CarteiraPage({Key key}) : super(key: key); ////////Chave para lista Carteira
@@ -26,10 +27,20 @@ class _CarteiraPageState extends State<CarteiraPage> {
   void initState() {
     super.initState();
 
-    DatabaseReference stocksRef = FirebaseDatabase.instance.reference().child("users").child("u3");
+    print('O usuario atual tem o seguinte ID: ' + globals.userID);
+
+    FirebaseDatabase.instance
+        .reference()
+        .child("users")
+        .child(globals.userID)
+        .set({"user": globals.userID});
+
+    DatabaseReference stocksRef =
+        FirebaseDatabase.instance.reference().child("users").child("u3");
+    //.child(globals.userID.toString());////////////////////////////////////////
 
     stocksRef.once().then((DataSnapshot snap) {
-      var key  = snap.value.keys;
+      var key = snap.value.keys;
       var data = snap.value;
 
       stockList.clear();
@@ -130,6 +141,7 @@ class _CarteiraPageState extends State<CarteiraPage> {
                     FirebaseDatabase.instance //Remove do Firebase
                         .reference()
                         .child("users")
+                        //.child(globals.userID.toString())/////////////////////////////////
                         .child("u3")
                         .child(stockList[index].stockID.toString())
                         .remove();
