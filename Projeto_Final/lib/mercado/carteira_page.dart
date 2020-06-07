@@ -26,11 +26,10 @@ class _CarteiraPageState extends State<CarteiraPage> {
   void initState() {
     super.initState();
 
-    DatabaseReference stocksRef =
-        FirebaseDatabase.instance.reference().child("users").child("u3");
+    DatabaseReference stocksRef = FirebaseDatabase.instance.reference().child("users").child("u3");
 
     stocksRef.once().then((DataSnapshot snap) {
-      var key = snap.value.keys;
+      var key  = snap.value.keys;
       var data = snap.value;
 
       stockList.clear();

@@ -1,7 +1,8 @@
 class Currency {
-  String cod;
-  String nome;
-  String currencyID;
+  String currencyName;
+  String currencySymbol;
+  String currencyId;
+  String id;
 
-  Currency(this.cod, this.nome, this.currencyID);
+  Currency(this.currencyName, this.currencySymbol, this.currencyId, this.id);
 }
