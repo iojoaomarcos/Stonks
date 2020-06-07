@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:projeto_final_acoes/UserData.dart' as globals;
 
 final AuthService authService = AuthService();
 
@@ -30,6 +31,8 @@ class AuthService {
     assert(user.uid == currentUser.uid);
 
     print("user: " + user.uid);
+
+    globals.userID = user.uid;
 
     return user.uid;
   }

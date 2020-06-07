@@ -3,6 +3,7 @@ import 'package:projeto_final_acoes/conversor_moedas/conversor_page.dart';
 import 'package:projeto_final_acoes/mercado/buscaAcao_page.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:projeto_final_acoes/mercado/stock.dart';
+import 'package:projeto_final_acoes/UserData.dart' as globals;
 
 class CarteiraPage extends StatefulWidget {
   CarteiraPage({Key key}) : super(key: key); ////////Chave para lista Carteira
@@ -25,6 +26,8 @@ class _CarteiraPageState extends State<CarteiraPage> {
   @override
   void initState() {
     super.initState();
+
+    print('O usuario atual tem o seguinte ID: ' + globals.userID);
 
     DatabaseReference stocksRef =
         FirebaseDatabase.instance.reference().child("users").child("u3");
