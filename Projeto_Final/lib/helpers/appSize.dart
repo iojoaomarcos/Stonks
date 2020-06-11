@@ -9,11 +9,11 @@ class AppSize {
   //   heightPercentage = heightSize / xdHeightSize;
   // }
 
-  static double widthProportions(double widthScreen, double size) {
+  static double widthProportions(double widthScreen) {
     return widthScreen / xdWidhtSize;
   }
 
-  static double heightProportions(double widthScreen, double size) {
+  static double heightProportions(double widthScreen) {
     return widthScreen / xdWidhtSize;
   }
 }

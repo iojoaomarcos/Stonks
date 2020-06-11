@@ -172,9 +172,14 @@ class _ConversorPageState extends State<ConversorPage> {
     }
   }
 
+  //Responsive APP
   double setWidth(double value) {
+    return value * AppSize.widthProportions(MediaQuery.of(context).size.width);
+  }
+
+  double setHeight(double value) {
     return value *
-        AppSize.widthProportions(MediaQuery.of(context).size.width, value);
+        AppSize.heightProportions(MediaQuery.of(context).size.height);
   }
 
   @override
@@ -190,11 +195,11 @@ class _ConversorPageState extends State<ConversorPage> {
         elevation: 20.0,
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(10.0),
+        padding: EdgeInsets.all(setWidth(10.0)),
         child: Column(
           children: <Widget>[
             Padding(
-              padding: EdgeInsets.all(10.0),
+              padding: EdgeInsets.all(setWidth(1.0)),
               child: Text(
                 "$_moeda1 $_moedaNome equivalem a",
                 style: TextStyle(
@@ -204,21 +209,22 @@ class _ConversorPageState extends State<ConversorPage> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 70.0),
+              padding: EdgeInsets.fromLTRB(
+                  setWidth(10.0), 0.0, 0.0, setHeight(70.0)),
               child: Text(
                 "$_moeda2 $_moedaNome2",
                 style: TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
-                    fontSize: 50.0),
+                    fontSize: setWidth(50.0)),
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(bottom: 20.0),
+              padding: EdgeInsets.only(bottom: setWidth(20.0)),
               child: Row(
                 children: <Widget>[
                   Container(
-                    width: 250.0,
+                    width: setWidth(250.0),
                     child: TextField(
                       controller: moeda1Controller,
                       decoration: InputDecoration(
@@ -229,21 +235,22 @@ class _ConversorPageState extends State<ConversorPage> {
                       ),
                       style: TextStyle(
                         color: Colors.blueAccent,
-                        fontSize: 20.0,
+                        fontSize: setWidth(20.0),
                       ),
                       onChanged: _moeda1Changed,
                       keyboardType: TextInputType.number,
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.only(left: 10.0),
+                    padding: EdgeInsets.only(left: setWidth(10.0)),
                     child: DropdownButton<String>(
                       value: _dropdownValue,
                       icon: Icon(Icons.arrow_downward),
-                      iconSize: 24,
-                      style: TextStyle(color: Colors.black45, fontSize: 16.0),
+                      iconSize: setWidth(24.0),
+                      style: TextStyle(
+                          color: Colors.black45, fontSize: setWidth(16.0)),
                       underline: Container(
-                        height: 2,
+                        height: setWidth(2.0),
                         color: Colors.black45,
                       ),
                       onChanged: (String newValue) {
@@ -264,7 +271,7 @@ class _ConversorPageState extends State<ConversorPage> {
             Row(
               children: <Widget>[
                 Container(
-                  width: 250.0,
+                  width: setWidth(250.0),
                   child: TextField(
                     controller: moeda2Controller,
                     decoration: InputDecoration(
@@ -275,21 +282,22 @@ class _ConversorPageState extends State<ConversorPage> {
                     ),
                     style: TextStyle(
                       color: Colors.blueAccent,
-                      fontSize: 20.0,
+                      fontSize: setWidth(20.0),
                     ),
                     onChanged: _moeda2Changed,
                     keyboardType: TextInputType.number,
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(left: 10.0),
+                  padding: EdgeInsets.only(left: setWidth(10.0)),
                   child: DropdownButton<String>(
                     value: _dropdownValue2,
                     icon: Icon(Icons.arrow_downward),
-                    iconSize: 24,
-                    style: TextStyle(color: Colors.black45, fontSize: 16.0),
+                    iconSize: setWidth(24.0),
+                    style: TextStyle(
+                        color: Colors.black45, fontSize: setWidth(16.0)),
                     underline: Container(
-                      height: 2,
+                      height: setHeight(2.0),
                       color: Colors.black45,
                     ),
                     onChanged: (String newValue) {
@@ -311,7 +319,7 @@ class _ConversorPageState extends State<ConversorPage> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Colors.blue[600],
-        items: const <BottomNavigationBarItem>[
+        items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(
               Icons.attach_money,
@@ -319,7 +327,7 @@ class _ConversorPageState extends State<ConversorPage> {
             ),
             title: Text(
               'Conversor',
-              style: TextStyle(color: Colors.white, fontSize: 18.0),
+              style: TextStyle(color: Colors.white, fontSize: setHeight(10.0)),
             ),
           ),
           BottomNavigationBarItem(
@@ -329,7 +337,7 @@ class _ConversorPageState extends State<ConversorPage> {
             ),
             title: Text(
               'Carteira',
-              style: TextStyle(color: Colors.black, fontSize: 18.0),
+              style: TextStyle(color: Colors.black, fontSize: setHeight(10.0)),
             ),
           ),
         ],
