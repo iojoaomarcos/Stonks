@@ -9,7 +9,7 @@ import 'dart:convert';
 import 'package:projeto_final_acoes/conversor_moedas/conversor_page.dart';
 
 
-const request = "https://api.hgbrasil.com/finance/stoc_rpice?key35fb37b4&symbol=bidi4.petr4.qual3.ciel3";
+const request = "https://api.hgbrasil.com/finance/stock_price?key=2dba2d82&symbol=bidi4";
 
 Future<Map> getData() async {
   http.Response response = await http.get(request);
