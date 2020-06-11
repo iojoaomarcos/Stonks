@@ -327,7 +327,7 @@ class _ConversorPageState extends State<ConversorPage> {
             ),
             title: Text(
               'Conversor',
-              style: TextStyle(color: Colors.white, fontSize: setHeight(10.0)),
+              style: TextStyle(color: Colors.white, fontSize: setWidth(18.0)),
             ),
           ),
           BottomNavigationBarItem(
@@ -337,7 +337,7 @@ class _ConversorPageState extends State<ConversorPage> {
             ),
             title: Text(
               'Carteira',
-              style: TextStyle(color: Colors.black, fontSize: setHeight(10.0)),
+              style: TextStyle(color: Colors.black, fontSize: setWidth(18.0)),
             ),
           ),
         ],

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_final_acoes/conversor_moedas/conversor_page.dart';
+import 'package:projeto_final_acoes/helpers/appSize.dart';
 import 'package:projeto_final_acoes/mercado/buscaAcao_page.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:projeto_final_acoes/mercado/stock.dart';
@@ -22,6 +23,16 @@ class _CarteiraPageState extends State<CarteiraPage> {
       color: Colors.white,
     ),
   );
+
+  //Responsive APP
+  double setWidth(double value) {
+    return value * AppSize.widthProportions(MediaQuery.of(context).size.width);
+  }
+
+  double setHeight(double value) {
+    return value *
+        AppSize.heightProportions(MediaQuery.of(context).size.height);
+  }
 
   @override
   void initState() {
@@ -65,10 +76,10 @@ class _CarteiraPageState extends State<CarteiraPage> {
   Widget _porcentagem(percent) {
     if (percent.substring(0, 1) == '-') {
       return Text('$percent%',
-          style: TextStyle(color: Colors.red, fontSize: 18.0));
+          style: TextStyle(color: Colors.red, fontSize: setWidth(18.0)));
     } else {
       return Text('$percent%',
-          style: TextStyle(color: Colors.green, fontSize: 18.0));
+          style: TextStyle(color: Colors.green, fontSize: setWidth(18.0)));
     }
   }
 
@@ -103,7 +114,8 @@ class _CarteiraPageState extends State<CarteiraPage> {
                                 borderSide: BorderSide(color: Colors.black)),
                             hintText: "Procurar...",
                             hintStyle: TextStyle(color: Colors.black)),
-                        style: TextStyle(color: Colors.white, fontSize: 16.0),
+                        style: TextStyle(
+                            color: Colors.white, fontSize: setWidth(16.0)),
                       );
                     } else {
                       this._cusIcon = Icon(Icons.search);
@@ -167,7 +179,6 @@ class _CarteiraPageState extends State<CarteiraPage> {
                     ),
                   ),
                 ),
-                //child: ListTile(title: Text('$item')),
 
                 child: Column(
                   children: <Widget>[
@@ -175,7 +186,7 @@ class _CarteiraPageState extends State<CarteiraPage> {
                       title: Text('$item',
                           style: TextStyle(
                             color: Colors.black,
-                            fontSize: 20.0,
+                            fontSize: setWidth(20.0),
                             fontWeight: FontWeight.bold,
                           )),
                       subtitle: Padding(
@@ -183,7 +194,8 @@ class _CarteiraPageState extends State<CarteiraPage> {
                         child: Text(
                           '$subtitle',
                           style: TextStyle(
-                              color: Colors.grey[400], fontSize: 14.0),
+                              color: Colors.grey[400],
+                              fontSize: setWidth(14.0)),
                         ),
                       ),
                       trailing: _porcentagem(percent),
@@ -200,7 +212,7 @@ class _CarteiraPageState extends State<CarteiraPage> {
           ),
           bottomNavigationBar: BottomNavigationBar(
             backgroundColor: Colors.blue[600],
-            items: const <BottomNavigationBarItem>[
+            items: <BottomNavigationBarItem>[
               BottomNavigationBarItem(
                 icon: Icon(
                   Icons.attach_money,
@@ -208,7 +220,8 @@ class _CarteiraPageState extends State<CarteiraPage> {
                 ),
                 title: Text(
                   'Conversor',
-                  style: TextStyle(color: Colors.black, fontSize: 18.0),
+                  style:
+                      TextStyle(color: Colors.black, fontSize: setWidth(18.0)),
                 ),
               ),
               BottomNavigationBarItem(
@@ -218,7 +231,8 @@ class _CarteiraPageState extends State<CarteiraPage> {
                 ),
                 title: Text(
                   'Carteira',
-                  style: TextStyle(color: Colors.white, fontSize: 18.0),
+                  style:
+                      TextStyle(color: Colors.white, fontSize: setWidth(18.0)),
                 ),
               ),
             ],
