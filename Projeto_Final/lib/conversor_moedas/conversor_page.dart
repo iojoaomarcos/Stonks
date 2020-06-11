@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'package:http/http.dart' as http;
 import 'package:projeto_final_acoes/conversor_moedas/currencies.dart';
+import 'package:projeto_final_acoes/helpers/appSize.dart';
 import 'dart:async';
 import 'dart:convert';
 
@@ -171,6 +172,11 @@ class _ConversorPageState extends State<ConversorPage> {
     }
   }
 
+  double setWidth(double value) {
+    return value *
+        AppSize.widthProportions(MediaQuery.of(context).size.width, value);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -193,7 +199,7 @@ class _ConversorPageState extends State<ConversorPage> {
                 "$_moeda1 $_moedaNome equivalem a",
                 style: TextStyle(
                   color: Colors.grey,
-                  fontSize: 20.0,
+                  fontSize: setWidth(20.0),
                 ),
               ),
             ),
