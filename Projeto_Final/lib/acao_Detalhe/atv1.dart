@@ -1,4 +1,4 @@
-import 'dart:html';
+
 
 import 'package:flutter/material.dart';
 
@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:projeto_final_acoes/conversor_moedas/conversor_page.dart';
+
 
 
 const request = "https://api.hgbrasil.com/finance/stock_price?key=2dba2d82&symbol=bidi4";
@@ -24,75 +24,21 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  int _selectedIndex = 0; //indice do bottombar
+   //indice do bottombar
   final open3 = TextEditingController();
   final close3 = TextEditingController();
 
-  
   String open2 = "0.0";
   String close2 = "0.0";
   
- 
-
-  
-  
-
-  void _clearAll() {
-    open3.text = "";
-    close3.text = "";
-    
-
-    setState(() {
-      open2 = "0.0";
-      close2 = "0.0";
-      
-    });
-  }
-
-  void _open(String text) {
-    if (text.isEmpty) {
-      _clearAll();
-      return;
-    }
-
-    close3.text= close3.toString();
-    open3.text = open3.toString();
-  
-    setState(() {
-      open2 = text;
-      open2 = (open2.toString());
-    });
-  }
-
-  void _close(String text) {
-    if (text.isEmpty) {
-      _clearAll();
-      return;
-    }
-
-    double dolar = double.parse(text);
-    open3.text = (open3.toString());
-
-    setState(() {
-      open2= (open2.toString());
-      open2 = text;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
+    
     return null;
   }
   
-
-  
-  
-  
 }
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -119,9 +65,12 @@ class _HomeState extends State<Home> {
                         textAlign: TextAlign.center,
                       ));
                     } else {
-                      var open3 =snapshot.data["results"]["BIDI4"]["open"];
-                      var close3=snapshot.data["results"]["BIDI4"]["close"];
+                      var open3 =snapshot.data["results"]["BIDI4"]["market_time"]["open"];
+                      var close3=snapshot.data["results"]["BIDI4"]["market_time"]["close"];
                       var price =snapshot.data["results"]["BIDI4"]["price"];
+                      var name = snapshot.data["results"]["BIDI4"]["name"];
+                      var region = snapshot.data["results"]["BIDI4"]["region"];
+                      var currency = snapshot.data["results"]["BIDI4"]["currency"];
                                      return SingleChildScrollView(
                                         padding: EdgeInsets.all(10.0),
                                         child: Column(
@@ -141,6 +90,28 @@ class _HomeState extends State<Home> {
                                                 "$close3 , horario de fechamento",
                                                 style:TextStyle(color: Colors.grey, fontSize: 20.0)
                                                   
+                                              )
+                                             )
+                                             ,
+                                              Padding(
+                                              padding: EdgeInsets.all(10.0),
+                                              child: Text(
+                                                "$name , nome",
+                                                style:TextStyle(color: Colors.grey, fontSize: 20.0)
+                                              )
+                                              )
+                                              ,Padding(
+                                              padding: EdgeInsets.all(10.0),
+                                              child: Text(
+                                                "$region, regiao",
+                                                style:TextStyle(color: Colors.grey, fontSize: 20.0)
+                                              )   
+                                              ),Padding(
+                                              padding: EdgeInsets.all(10.0),
+                                              child: Text(
+                                                "$currency,  ocorrencia",
+                                                style:TextStyle(color: Colors.grey, fontSize: 20.0)
+                                                  
                                               ),
                                             ),
                                             Padding(
@@ -148,6 +119,7 @@ class _HomeState extends State<Home> {
                                               child: Text(
                                                 "$price , valor",
                             style:TextStyle(color: Colors.grey, fontSize: 20.0)
+                                           
                               
                           ),
                         ),
