@@ -26,19 +26,11 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
    //indice do bottombar
   final open3 = TextEditingController();
-  final close3 = TextEditingController();
-
-  String open2 = "0.0";
-  String close2 = "0.0";
-  
-
-  @override
-  Widget build(BuildContext context) {
-    
-    return null;
-  }
-  
-}
+  final close3 = TextEditingController(); 
+   final price = TextEditingController();
+  final name= TextEditingController();  
+  final region = TextEditingController();
+  final currency = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -130,6 +122,8 @@ class _HomeState extends State<Home> {
       }                   
     } 
               }
-    )
- );
-}
+     )
+    );
+  }
+ }
+
