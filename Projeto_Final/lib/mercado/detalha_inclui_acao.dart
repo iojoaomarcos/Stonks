@@ -19,8 +19,6 @@ class _DetalhaIncluiAcaoState extends State<DetalhaIncluiAcao> {
   final qtdeController = TextEditingController();
   final priceController = TextEditingController();
 
-  int qtd = 0;
-
   String name;
   String symbol;
 
@@ -35,15 +33,9 @@ class _DetalhaIncluiAcaoState extends State<DetalhaIncluiAcao> {
     name = widget.name;
     symbol = widget.symbol;
     
-    final request = "https://api.hgbrasil.com/finance/stock_price?key=49e7344b&symbol=" + symbol;
+    final request = "https://api.hgbrasil.com/finance/stock_price?key=23cf857d&symbol=" + symbol;
 
     Future<Map> response = getData(request);
-
-    print('------------------------');
-    print(symbol);
-    print('------------------------');
-    print(name);
-    print('------------------------');
 
     response.then((snap) {
       setState(() {
@@ -54,14 +46,6 @@ class _DetalhaIncluiAcaoState extends State<DetalhaIncluiAcao> {
 
         priceController.text = snap['results'][symbol]['price'].toStringAsFixed(2);
       });
-
-      print(region);
-      print('------------------------');
-      print(currency);
-      print('------------------------');
-      print(price);
-      print('------------------------');
-      print(changePercent);
     });
   }
 
@@ -172,7 +156,7 @@ class _DetalhaIncluiAcaoState extends State<DetalhaIncluiAcao> {
               height: 50.0,
               child: RaisedButton(
                 color: Colors.blueAccent,
-                onPressed: () {},
+                onPressed: () {}, //grava posição no banco
                 child: const Text('Adicionar Compra', style: TextStyle(color: Colors.white, fontSize: 20)),
               ),
             ),
