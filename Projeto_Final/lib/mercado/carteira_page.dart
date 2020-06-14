@@ -11,8 +11,6 @@ import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
 
-
-
 class CarteiraPage extends StatefulWidget {
   CarteiraPage({Key key}) : super(key: key); ////////Chave para lista Carteira
   @override
@@ -49,7 +47,8 @@ class _CarteiraPageState extends State<CarteiraPage> {
 
     //FirebaseDatabase.instance.reference().child("users").child(globals.userID).set({"user": globals.userID});
 
-    DatabaseReference stocksRef = FirebaseDatabase.instance.reference().child("users").child("userTeste");
+    DatabaseReference stocksRef =
+        FirebaseDatabase.instance.reference().child("users").child("userTeste");
     //.child(globals.userID.toString());////////////////////////////////////////
 
     stocksRef.once().then((DataSnapshot snap) {
@@ -59,16 +58,24 @@ class _CarteiraPageState extends State<CarteiraPage> {
       stockList.clear();
 
       for (var individualKey in key) {
-        final request = "https://api.hgbrasil.com/finance/stock_price?key=23cf857d&symbol=" + data[individualKey]['symbol'];
+        final request =
+            "https://api.hgbrasil.com/finance/stock_price?key=23cf857d&symbol=" +
+                data[individualKey]['symbol'];
 
         Future<Map> response = getData(request);
 
         response.then((snap) {
-          double price = snap['results'][data[individualKey]['symbol']]['price'];
-          double changePercent = snap['results'][data[individualKey]['symbol']]['change_percent'];
+          double price =
+              snap['results'][data[individualKey]['symbol']]['price'];
+          double changePercent =
+              snap['results'][data[individualKey]['symbol']]['change_percent'];
 
-          var percent  = double.parse((((price/data[individualKey]['priceBuy'])-1)*100).toStringAsFixed(1));
-          var valFinal = ((data[individualKey]['priceBuy']-price)*data[individualKey]['qtde']).round();
+          var percent = double.parse(
+              (((price / data[individualKey]['priceBuy']) - 1) * 100)
+                  .toStringAsFixed(1));
+          var valFinal = ((data[individualKey]['priceBuy'] - price) *
+                  data[individualKey]['qtde'])
+              .round();
 
           Stock stonks = new Stock(
             data[individualKey]['name'],
@@ -93,25 +100,29 @@ class _CarteiraPageState extends State<CarteiraPage> {
   Widget _porcentagem(percent, valFinal, qtde) {
     if (percent <= 0.0) {
       return Column(
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 8.0),
-                    child: Text('R\$ $valFinal', style: TextStyle(color: Colors.red, fontSize: 18.0)),
-                  ),
-                  Text('$percent%', style: TextStyle(color: Colors.red, fontSize: 18.0))
-                ],
-              );
+        children: <Widget>[
+          Padding(
+            padding: EdgeInsets.only(bottom: setHeight(8.0)),
+            child: Text('R\$ $valFinal',
+                style: TextStyle(color: Colors.red, fontSize: setWidth(18.0))),
+          ),
+          Text('$percent%',
+              style: TextStyle(color: Colors.red, fontSize: setWidth(18.0)))
+        ],
+      );
     } else {
       return Column(
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 8.0),
-                    child: Text('R\$ $valFinal', style: TextStyle(color: Colors.green, fontSize: 18.0)),
-                  ),
-                  Text('$percent%', style: TextStyle(color: Colors.green, fontSize: 18.0))
-                ],
-              );
-
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8.0),
+            child: Text('R\$ $valFinal',
+                style:
+                    TextStyle(color: Colors.green, fontSize: setWidth(18.0))),
+          ),
+          Text('$percent%',
+              style: TextStyle(color: Colors.green, fontSize: setWidth(18.0)))
+        ],
+      );
     }
   }
 
@@ -177,13 +188,13 @@ class _CarteiraPageState extends State<CarteiraPage> {
           body: ListView.builder(
             itemCount: stockList.length,
             itemBuilder: (context, index) {
-              final item          = stockList[index].name;
-              final symbol        = stockList[index].symbol;
-              final qtde          = stockList[index].qtde;
-              final priceBuy      = stockList[index].priceBuy;
-              final percent       = stockList[index].percent;
-              final valFinal      = stockList[index].valFinal;
-              final price         = stockList[index].price;
+              final item = stockList[index].name;
+              final symbol = stockList[index].symbol;
+              final qtde = stockList[index].qtde;
+              final priceBuy = stockList[index].priceBuy;
+              final percent = stockList[index].percent;
+              final valFinal = stockList[index].valFinal;
+              final price = stockList[index].price;
               final changePercent = stockList[index].changePercent;
 
               return Dismissible(
@@ -233,39 +244,43 @@ class _CarteiraPageState extends State<CarteiraPage> {
                           )),
 
                       subtitle: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.only(top: 8.0, bottom: 5.0),
-                            child: Text(
-                              '$symbol',
-                              style: TextStyle(
-                                color: Colors.grey[400], fontSize: 16.0),
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  top: setHeight(8.0), bottom: setHeight(5.0)),
+                              child: Text(
+                                '$symbol',
+                                style: TextStyle(
+                                    color: Colors.grey[400],
+                                    fontSize: setWidth(16.0)),
+                              ),
                             ),
-                          ),
-                          Text('Qtd. Buy: $qtde', style: TextStyle(color: Colors.grey[400], fontSize: 16.0))
-
-                      ),
+                            Text('Qtd. Buy: $qtde',
+                                style: TextStyle(
+                                    color: Colors.grey[400],
+                                    fontSize: setWidth(16.0)))
+                          ]),
                       isThreeLine: true,
                       trailing: _porcentagem(percent, valFinal, qtde),
                       onTap: () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => DetalhaAcaoComprada(
-                              symbol: symbol, 
-                              name: item, 
-                              qtde: qtde, 
-                              priceBuy: priceBuy, 
-                              percent: percent, 
-                              valFinal: valFinal, 
-                              price: price,
-                              changePercent: changePercent)
-                          ),
-                      );}, //Muda para página contendo detalhes da ação passando como parametro o simbolo
+                              builder: (context) => DetalhaAcaoComprada(
+                                  symbol: symbol,
+                                  name: item,
+                                  qtde: qtde,
+                                  priceBuy: priceBuy,
+                                  percent: percent,
+                                  valFinal: valFinal,
+                                  price: price,
+                                  changePercent: changePercent)),
+                        );
+                      }, //Muda para página contendo detalhes da ação passando como parametro o simbolo
                     ),
                     Divider(
-                      height: 2.0,
+                      height: setHeight(2.0),
                       color: Colors.grey,
                     )
                   ],
