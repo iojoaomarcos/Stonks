@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_final_acoes/conversor_moedas/conversor_page.dart';
 import 'package:projeto_final_acoes/helpers/firebase_auth.dart';
+import 'package:projeto_final_acoes/helpers/appSize.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -8,6 +9,16 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  //Responsive APP
+  double setWidth(double value) {
+    return value * AppSize.widthProportions(MediaQuery.of(context).size.width);
+  }
+
+  double setHeight(double value) {
+    return value *
+        AppSize.heightProportions(MediaQuery.of(context).size.height);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,9 +35,11 @@ class _LoginPageState extends State<LoginPage> {
             mainAxisSize: MainAxisSize.max,
             children: <Widget>[
               Padding(
-                padding: const EdgeInsets.only(top: 250.0, bottom: 70.0),
-                child:
-                    Image(image: AssetImage("images/stonks.png"), height: 80.0),
+                padding: EdgeInsets.only(
+                    top: setWidth(250.0), bottom: setWidth(70.0)),
+                child: Image(
+                    image: AssetImage("images/stonks.png"),
+                    height: setWidth(80.0)),
               ),
               _signInButton(),
             ],
@@ -40,7 +53,8 @@ class _LoginPageState extends State<LoginPage> {
     return Container(
       decoration: ShapeDecoration(
         color: Colors.white,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(setWidth(40.0))),
       ),
       child: OutlineButton(
         splashColor: Colors.grey,
@@ -59,18 +73,20 @@ class _LoginPageState extends State<LoginPage> {
         highlightElevation: 0,
         borderSide: BorderSide(color: Colors.grey),
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+          padding: EdgeInsets.fromLTRB(0, setHeight(10.0), 0, setHeight(10.0)),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Image(image: AssetImage("images/google_logo.png"), height: 35.0),
+              Image(
+                  image: AssetImage("images/google_logo.png"),
+                  height: setHeight(20.0)),
               Padding(
-                padding: const EdgeInsets.only(left: 10),
+                padding: EdgeInsets.only(left: setWidth(10.0)),
                 child: Text(
                   'Sign in with Google',
                   style: TextStyle(
-                    fontSize: 20,
+                    fontSize: setWidth(20.0),
                     color: Colors.grey,
                   ),
                 ),
