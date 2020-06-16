@@ -185,12 +185,14 @@ class _DetalhaIncluiAcaoState extends State<DetalhaIncluiAcao> {
               height: setHeight(35.0),
               child: RaisedButton(
                 color: Colors.blueAccent,
+
                 onPressed: () {
                   FirebaseDatabase.instance.reference().child('users').child('globals.userID').push({
                     'title': 'Realtime db rocks',
                     'created_at': time});
                 }, //grava posição no banco
-                child: Text('Adicionar Compra',
+=======
+                child: Text('Add Purchase',
                     style: TextStyle(
                         color: Colors.white, fontSize: setWidth(20.0))),
               ),
@@ -201,3 +203,5 @@ class _DetalhaIncluiAcaoState extends State<DetalhaIncluiAcao> {
     );
   }
 }
+
+//teste

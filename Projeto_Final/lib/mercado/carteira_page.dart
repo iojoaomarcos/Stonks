@@ -23,7 +23,7 @@ class _CarteiraPageState extends State<CarteiraPage> {
 
   Icon _cusIcon = Icon(Icons.search);
   Widget _cusSearchBar = Text(
-    "Carteiras",
+    "Stocks",
     style: TextStyle(
       color: Colors.white,
     ),
@@ -43,7 +43,7 @@ class _CarteiraPageState extends State<CarteiraPage> {
   void initState() {
     super.initState();
 
-    print('O usuario atual tem o seguinte ID: ' + globals.userID);
+    print('The user has the following id: ' + globals.userID);
 
     //FirebaseDatabase.instance.reference().child("users").child(globals.userID).set({"user": globals.userID});
 
@@ -160,14 +160,14 @@ class _CarteiraPageState extends State<CarteiraPage> {
                                 borderSide: BorderSide(color: Colors.black)),
                             focusedBorder: UnderlineInputBorder(
                                 borderSide: BorderSide(color: Colors.black)),
-                            hintText: "Procurar...",
+                            hintText: "Search ...",
                             hintStyle: TextStyle(color: Colors.black)),
                         style: TextStyle(
                             color: Colors.white, fontSize: setWidth(16.0)),
                       );
                     } else {
                       this._cusIcon = Icon(Icons.search);
-                      this._cusSearchBar = Text("Carteiras");
+                      this._cusSearchBar = Text("Stocks");
                     }
                   });
                 })
@@ -217,7 +217,7 @@ class _CarteiraPageState extends State<CarteiraPage> {
                   //Confirmando que item foi removido
                   Scaffold.of(context) //item = item arrastado
                       .showSnackBar(SnackBar(
-                          content: Text("$item foi removido da lista")));
+                          content: Text("$item Removed from list")));
                 },
                 // Quando o item eh arrastado, se mostra uma linha vermelha
                 // induzindo o significado de exclusao
@@ -297,7 +297,7 @@ class _CarteiraPageState extends State<CarteiraPage> {
                   color: Colors.black,
                 ),
                 title: Text(
-                  'Conversor',
+                  'Converter',
                   style:
                       TextStyle(color: Colors.black, fontSize: setWidth(18.0)),
                 ),
@@ -308,7 +308,7 @@ class _CarteiraPageState extends State<CarteiraPage> {
                   color: Colors.white,
                 ),
                 title: Text(
-                  'Carteira',
+                  'Stocks',
                   style:
                       TextStyle(color: Colors.white, fontSize: setWidth(18.0)),
                 ),
