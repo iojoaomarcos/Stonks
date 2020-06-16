@@ -155,7 +155,7 @@ class _DetalhaAcaoCompradaState extends State<DetalhaAcaoComprada> {
             Padding(
               padding: EdgeInsets.only(top: setHeight(10.0)),
               child: ListTile(
-                title: Text('Purchase amount',
+                title: Text('Quantidade Comprada',
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: setWidth(18.0),
@@ -167,7 +167,7 @@ class _DetalhaAcaoCompradaState extends State<DetalhaAcaoComprada> {
               ),
             ),
             ListTile(
-              title: Text('Buying price',
+              title: Text('Preço de Compra',
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: setWidth(18.0),
@@ -178,7 +178,7 @@ class _DetalhaAcaoCompradaState extends State<DetalhaAcaoComprada> {
                       TextStyle(color: Colors.black, fontSize: setWidth(18.0))),
             ),
             ListTile(
-              title: Text('Purchased variation (R\$)',
+              title: Text('Variação Comprada (R\$)',
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: setWidth(18.0),
@@ -189,7 +189,7 @@ class _DetalhaAcaoCompradaState extends State<DetalhaAcaoComprada> {
             Padding(
               padding: EdgeInsets.only(bottom: setHeight(30.0)),
               child: ListTile(
-                title: Text('purchased variation (%)',
+                title: Text('Variação Comprada (%)',
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: setWidth(18.0),

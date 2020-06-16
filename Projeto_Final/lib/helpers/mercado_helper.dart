@@ -115,7 +115,7 @@ class Carteira {
 
   @override
   String toString() {
-    return "Wallet(id: $id, sigla: $sigla)";
+    return "Carteira(id: $id, sigla: $sigla)";
   }
 
 }

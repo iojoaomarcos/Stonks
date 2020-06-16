@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_final_acoes/conversor_moedas/conversor_page.dart';
+import 'package:projeto_final_acoes/helpers/appSize.dart';
 import 'package:projeto_final_acoes/mercado/buscaAcao_page.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:projeto_final_acoes/mercado/stock.dart';
+import 'package:projeto_final_acoes/mercado/detalha_acao_comprada.dart';
+import 'package:projeto_final_acoes/helpers/stock.dart';
 import 'package:projeto_final_acoes/UserData.dart' as globals;
+
+import 'package:http/http.dart' as http;
+import 'dart:async';
+import 'dart:convert';
 
 class CarteiraPage extends StatefulWidget {
   CarteiraPage({Key key}) : super(key: key); ////////Chave para lista Carteira
@@ -17,26 +23,32 @@ class _CarteiraPageState extends State<CarteiraPage> {
 
   Icon _cusIcon = Icon(Icons.search);
   Widget _cusSearchBar = Text(
-    "Wallet",
+    "Carteiras",
     style: TextStyle(
       color: Colors.white,
     ),
   );
 
+  //Responsive APP
+  double setWidth(double value) {
+    return value * AppSize.widthProportions(MediaQuery.of(context).size.width);
+  }
+
+  double setHeight(double value) {
+    return value *
+        AppSize.heightProportions(MediaQuery.of(context).size.height);
+  }
+
   @override
   void initState() {
     super.initState();
 
-    print('The user has the following id: ' + globals.userID);
+    print('O usuario atual tem o seguinte ID: ' + globals.userID);
 
-    FirebaseDatabase.instance
-        .reference()
-        .child("users")
-        .child(globals.userID)
-        .set({"user": globals.userID});
+    //FirebaseDatabase.instance.reference().child("users").child(globals.userID).set({"user": globals.userID});
 
     DatabaseReference stocksRef =
-        FirebaseDatabase.instance.reference().child("users").child("u3");
+        FirebaseDatabase.instance.reference().child("users").child("userTeste");
     //.child(globals.userID.toString());////////////////////////////////////////
 
     stocksRef.once().then((DataSnapshot snap) {
@@ -46,30 +58,77 @@ class _CarteiraPageState extends State<CarteiraPage> {
       stockList.clear();
 
       for (var individualKey in key) {
-        Stock stonks = new Stock(
-          data[individualKey]['business'],
-          data[individualKey]['percentage'],
-          data[individualKey]['stock'],
-          individualKey,
-        );
+        final request =
+            "https://api.hgbrasil.com/finance/stock_price?key=23cf857d&symbol=" +
+                data[individualKey]['symbol'];
 
-        stockList.add(stonks);
+        Future<Map> response = getData(request);
+
+        response.then((snap) {
+          double price =
+              snap['results'][data[individualKey]['symbol']]['price'];
+          double changePercent =
+              snap['results'][data[individualKey]['symbol']]['change_percent'];
+
+          var percent = double.parse(
+              (((price / data[individualKey]['priceBuy']) - 1) * 100)
+                  .toStringAsFixed(1));
+          var valFinal = ((data[individualKey]['priceBuy'] - price) *
+                  data[individualKey]['qtde'])
+              .round();
+
+          Stock stonks = new Stock(
+            data[individualKey]['name'],
+            data[individualKey]['symbol'],
+            data[individualKey]['qtde'],
+            data[individualKey]['priceBuy'],
+            percent,
+            valFinal,
+            price,
+            changePercent,
+            individualKey,
+          );
+
+          setState(() {
+            stockList.add(stonks);
+          });
+        });
       }
-
-      setState(() {
-        print('Stock list size: ' + stockList.length.toString());
-      });
     });
   }
 
-  Widget _porcentagem(percent) {
-    if (percent.substring(0, 1) == '-') {
-      return Text('$percent%',
-          style: TextStyle(color: Colors.red, fontSize: 18.0));
+  Widget _porcentagem(percent, valFinal, qtde) {
+    if (percent <= 0.0) {
+      return Column(
+        children: <Widget>[
+          Padding(
+            padding: EdgeInsets.only(bottom: setHeight(8.0)),
+            child: Text('R\$ $valFinal',
+                style: TextStyle(color: Colors.red, fontSize: setWidth(18.0))),
+          ),
+          Text('$percent%',
+              style: TextStyle(color: Colors.red, fontSize: setWidth(18.0)))
+        ],
+      );
     } else {
-      return Text('$percent%',
-          style: TextStyle(color: Colors.green, fontSize: 18.0));
+      return Column(
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8.0),
+            child: Text('R\$ $valFinal',
+                style:
+                    TextStyle(color: Colors.green, fontSize: setWidth(18.0))),
+          ),
+          Text('$percent%',
+              style: TextStyle(color: Colors.green, fontSize: setWidth(18.0)))
+        ],
+      );
     }
+  }
+
+  Future<Map> getData(request) async {
+    http.Response response = await http.get(request);
+    return json.decode(response.body);
   }
 
   void _onItemTapped(int index) {
@@ -101,13 +160,14 @@ class _CarteiraPageState extends State<CarteiraPage> {
                                 borderSide: BorderSide(color: Colors.black)),
                             focusedBorder: UnderlineInputBorder(
                                 borderSide: BorderSide(color: Colors.black)),
-                            hintText: "Search ...",
+                            hintText: "Procurar...",
                             hintStyle: TextStyle(color: Colors.black)),
-                        style: TextStyle(color: Colors.white, fontSize: 16.0),
+                        style: TextStyle(
+                            color: Colors.white, fontSize: setWidth(16.0)),
                       );
                     } else {
                       this._cusIcon = Icon(Icons.search);
-                      this._cusSearchBar = Text("Wallet");
+                      this._cusSearchBar = Text("Carteiras");
                     }
                   });
                 })
@@ -128,9 +188,14 @@ class _CarteiraPageState extends State<CarteiraPage> {
           body: ListView.builder(
             itemCount: stockList.length,
             itemBuilder: (context, index) {
-              final item = stockList[index].business;
-              final subtitle = stockList[index].stock;
-              final percent = stockList[index].percentage;
+              final item = stockList[index].name;
+              final symbol = stockList[index].symbol;
+              final qtde = stockList[index].qtde;
+              final priceBuy = stockList[index].priceBuy;
+              final percent = stockList[index].percent;
+              final valFinal = stockList[index].valFinal;
+              final price = stockList[index].price;
+              final changePercent = stockList[index].changePercent;
 
               return Dismissible(
                 key: Key(item), // Chave de identificacao de item
@@ -142,7 +207,7 @@ class _CarteiraPageState extends State<CarteiraPage> {
                         .reference()
                         .child("users")
                         //.child(globals.userID.toString())/////////////////////////////////
-                        .child("u3")
+                        .child("userTeste")
                         .child(stockList[index].stockID.toString())
                         .remove();
 
@@ -152,7 +217,7 @@ class _CarteiraPageState extends State<CarteiraPage> {
                   //Confirmando que item foi removido
                   Scaffold.of(context) //item = item arrastado
                       .showSnackBar(SnackBar(
-                          content: Text("$item Removed From List")));
+                          content: Text("$item foi removido da lista")));
                 },
                 // Quando o item eh arrastado, se mostra uma linha vermelha
                 // induzindo o significado de exclusao
@@ -167,7 +232,6 @@ class _CarteiraPageState extends State<CarteiraPage> {
                     ),
                   ),
                 ),
-                //child: ListTile(title: Text('$item')),
 
                 child: Column(
                   children: <Widget>[
@@ -175,22 +239,48 @@ class _CarteiraPageState extends State<CarteiraPage> {
                       title: Text('$item',
                           style: TextStyle(
                             color: Colors.black,
-                            fontSize: 20.0,
+                            fontSize: setWidth(20.0),
                             fontWeight: FontWeight.bold,
                           )),
-                      subtitle: Padding(
-                        padding: const EdgeInsets.only(top: 8.0),
-                        child: Text(
-                          '$subtitle',
-                          style: TextStyle(
-                              color: Colors.grey[400], fontSize: 14.0),
-                        ),
-                      ),
-                      trailing: _porcentagem(percent),
-                      onTap: () {}, //Muda para página contendo detalhes da ação
+
+                      subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  top: setHeight(8.0), bottom: setHeight(5.0)),
+                              child: Text(
+                                '$symbol',
+                                style: TextStyle(
+                                    color: Colors.grey[400],
+                                    fontSize: setWidth(16.0)),
+                              ),
+                            ),
+                            Text('Qtd. Buy: $qtde',
+                                style: TextStyle(
+                                    color: Colors.grey[400],
+                                    fontSize: setWidth(16.0)))
+                          ]),
+                      isThreeLine: true,
+                      trailing: _porcentagem(percent, valFinal, qtde),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => DetalhaAcaoComprada(
+                                  symbol: symbol,
+                                  name: item,
+                                  qtde: qtde,
+                                  priceBuy: priceBuy,
+                                  percent: percent,
+                                  valFinal: valFinal,
+                                  price: price,
+                                  changePercent: changePercent)),
+                        );
+                      }, //Muda para página contendo detalhes da ação passando como parametro o simbolo
                     ),
                     Divider(
-                      height: 2.0,
+                      height: setHeight(2.0),
                       color: Colors.grey,
                     )
                   ],
@@ -200,15 +290,16 @@ class _CarteiraPageState extends State<CarteiraPage> {
           ),
           bottomNavigationBar: BottomNavigationBar(
             backgroundColor: Colors.blue[600],
-            items: const <BottomNavigationBarItem>[
+            items: <BottomNavigationBarItem>[
               BottomNavigationBarItem(
                 icon: Icon(
                   Icons.attach_money,
                   color: Colors.black,
                 ),
                 title: Text(
-                  'Converter',
-                  style: TextStyle(color: Colors.black, fontSize: 18.0),
+                  'Conversor',
+                  style:
+                      TextStyle(color: Colors.black, fontSize: setWidth(18.0)),
                 ),
               ),
               BottomNavigationBarItem(
@@ -217,8 +308,9 @@ class _CarteiraPageState extends State<CarteiraPage> {
                   color: Colors.white,
                 ),
                 title: Text(
-                  'Wallet',
-                  style: TextStyle(color: Colors.white, fontSize: 18.0),
+                  'Carteira',
+                  style:
+                      TextStyle(color: Colors.white, fontSize: setWidth(18.0)),
                 ),
               ),
             ],

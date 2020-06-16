@@ -186,7 +186,7 @@ class _DetalhaIncluiAcaoState extends State<DetalhaIncluiAcao> {
               child: RaisedButton(
                 color: Colors.blueAccent,
                 onPressed: () {}, //grava posição no banco
-                child: Text('Add Purchase',
+                child: Text('Adicionar Compra',
                     style: TextStyle(
                         color: Colors.white, fontSize: setWidth(20.0))),
               ),
