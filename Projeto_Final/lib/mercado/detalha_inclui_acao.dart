@@ -187,11 +187,18 @@ class _DetalhaIncluiAcaoState extends State<DetalhaIncluiAcao> {
                 color: Colors.blueAccent,
 
                 onPressed: () {
-                  FirebaseDatabase.instance.reference().child('users').child('globals.userID').push({
-                    'title': 'Realtime db rocks',
-                    'created_at': time});
+                  FirebaseDatabase.instance
+                      .reference()
+                      .child('users')
+                      .child('globals.userID')
+                      .set({
+                    'name': 'Ambev S.A.',
+                    'priceBuy': '13.26',
+                    'qtde': '25',
+                    'symbol': 'ABEV3'
+                  });
                 }, //grava posição no banco
-=======
+
                 child: Text('Add Purchase',
                     style: TextStyle(
                         color: Colors.white, fontSize: setWidth(20.0))),
