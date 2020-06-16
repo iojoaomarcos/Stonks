@@ -14,7 +14,7 @@ class _BuscaAcaoPageState extends State<BuscaAcaoPage> {
   List<AcaoBovespa> bovespaList = []; //Lista das acoes do usuario
 
   Icon _cusIcon = Icon(Icons.search);
-  Widget _cusSearchBar = Text("Find Stock");
+  Widget _cusSearchBar = Text("Find Stocks");
 
   //Responsive APP
   double setWidth(double value) {
@@ -51,7 +51,7 @@ class _BuscaAcaoPageState extends State<BuscaAcaoPage> {
 
       setState(() {
         bovespaList.sort((a, b) => a.name.compareTo(b.name));
-        print('Available stock amount: ' +
+        print('Available stocks amount: ' +
             bovespaList.length.toString());
       });
     });
@@ -86,7 +86,7 @@ class _BuscaAcaoPageState extends State<BuscaAcaoPage> {
                     );
                   } else {
                     this._cusIcon = Icon(Icons.search);
-                    this._cusSearchBar = Text("Find Stock");
+                    this._cusSearchBar = Text("Find Stocks");
                   }
                 });
               })

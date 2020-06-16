@@ -23,7 +23,7 @@ class _CarteiraPageState extends State<CarteiraPage> {
 
   Icon _cusIcon = Icon(Icons.search);
   Widget _cusSearchBar = Text(
-    "Stock",
+    "Stocks",
     style: TextStyle(
       color: Colors.white,
     ),
@@ -167,7 +167,7 @@ class _CarteiraPageState extends State<CarteiraPage> {
                       );
                     } else {
                       this._cusIcon = Icon(Icons.search);
-                      this._cusSearchBar = Text("Stock");
+                      this._cusSearchBar = Text("Stocks");
                     }
                   });
                 })
@@ -308,7 +308,7 @@ class _CarteiraPageState extends State<CarteiraPage> {
                   color: Colors.white,
                 ),
                 title: Text(
-                  'Stock',
+                  'Stocks',
                   style:
                       TextStyle(color: Colors.white, fontSize: setWidth(18.0)),
                 ),
