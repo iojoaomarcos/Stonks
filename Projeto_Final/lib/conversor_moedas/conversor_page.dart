@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 
 import 'package:http/http.dart' as http;
 import 'package:projeto_final_acoes/conversor_moedas/currencies.dart';
-import 'package:projeto_final_acoes/helpers/appSize.dart';
 import 'dart:async';
 import 'dart:convert';
 
@@ -172,59 +171,48 @@ class _ConversorPageState extends State<ConversorPage> {
     }
   }
 
-  //Responsive APP
-  double setWidth(double value) {
-    return value * AppSize.widthProportions(MediaQuery.of(context).size.width);
-  }
-
-  double setHeight(double value) {
-    return value *
-        AppSize.heightProportions(MediaQuery.of(context).size.height);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text(
-          "Conversor de Moedas",
+          "Currency Converter",
           style: TextStyle(color: Colors.white),
         ),
         backgroundColor: Colors.blueAccent,
         elevation: 20.0,
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(setWidth(10.0)),
+        padding: EdgeInsets.all(10.0),
         child: Column(
           children: <Widget>[
             Padding(
-              padding: EdgeInsets.all(setWidth(1.0)),
+              padding: EdgeInsets.all(10.0),
               child: Text(
-                "$_moeda1 $_moedaNome equivalem a",
+                "$_moeda1 $_moedaNome amounts to",
                 style: TextStyle(
                   color: Colors.grey,
-                  fontSize: setWidth(20.0),
+                  fontSize: 20.0,
                 ),
               ),
             ),
             Padding(
-              padding: EdgeInsets.fromLTRB(
-                  setWidth(10.0), 0.0, 0.0, setHeight(70.0)),
+              padding: EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 70.0),
               child: Text(
                 "$_moeda2 $_moedaNome2",
                 style: TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
-                    fontSize: setWidth(50.0)),
+                    fontSize: 50.0),
               ),
             ),
             Padding(
-              padding: EdgeInsets.only(bottom: setWidth(20.0)),
+              padding: const EdgeInsets.only(bottom: 20.0),
               child: Row(
                 children: <Widget>[
                   Container(
-                    width: setWidth(250.0),
+                    width: 250.0,
                     child: TextField(
                       controller: moeda1Controller,
                       decoration: InputDecoration(
@@ -235,22 +223,21 @@ class _ConversorPageState extends State<ConversorPage> {
                       ),
                       style: TextStyle(
                         color: Colors.blueAccent,
-                        fontSize: setWidth(20.0),
+                        fontSize: 20.0,
                       ),
                       onChanged: _moeda1Changed,
                       keyboardType: TextInputType.number,
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.only(left: setWidth(10.0)),
+                    padding: EdgeInsets.only(left: 10.0),
                     child: DropdownButton<String>(
                       value: _dropdownValue,
                       icon: Icon(Icons.arrow_downward),
-                      iconSize: setWidth(24.0),
-                      style: TextStyle(
-                          color: Colors.black45, fontSize: setWidth(16.0)),
+                      iconSize: 24,
+                      style: TextStyle(color: Colors.black45, fontSize: 16.0),
                       underline: Container(
-                        height: setWidth(2.0),
+                        height: 2,
                         color: Colors.black45,
                       ),
                       onChanged: (String newValue) {
@@ -271,7 +258,7 @@ class _ConversorPageState extends State<ConversorPage> {
             Row(
               children: <Widget>[
                 Container(
-                  width: setWidth(250.0),
+                  width: 250.0,
                   child: TextField(
                     controller: moeda2Controller,
                     decoration: InputDecoration(
@@ -282,22 +269,21 @@ class _ConversorPageState extends State<ConversorPage> {
                     ),
                     style: TextStyle(
                       color: Colors.blueAccent,
-                      fontSize: setWidth(20.0),
+                      fontSize: 20.0,
                     ),
                     onChanged: _moeda2Changed,
                     keyboardType: TextInputType.number,
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(left: setWidth(10.0)),
+                  padding: EdgeInsets.only(left: 10.0),
                   child: DropdownButton<String>(
                     value: _dropdownValue2,
                     icon: Icon(Icons.arrow_downward),
-                    iconSize: setWidth(24.0),
-                    style: TextStyle(
-                        color: Colors.black45, fontSize: setWidth(16.0)),
+                    iconSize: 24,
+                    style: TextStyle(color: Colors.black45, fontSize: 16.0),
                     underline: Container(
-                      height: setHeight(2.0),
+                      height: 2,
                       color: Colors.black45,
                     ),
                     onChanged: (String newValue) {
@@ -319,15 +305,15 @@ class _ConversorPageState extends State<ConversorPage> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Colors.blue[600],
-        items: <BottomNavigationBarItem>[
+        items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(
               Icons.attach_money,
               color: Colors.white,
             ),
             title: Text(
-              'Conversor',
-              style: TextStyle(color: Colors.white, fontSize: setWidth(18.0)),
+              'Converter',
+              style: TextStyle(color: Colors.white, fontSize: 18.0),
             ),
           ),
           BottomNavigationBarItem(
@@ -336,8 +322,8 @@ class _ConversorPageState extends State<ConversorPage> {
               color: Colors.black,
             ),
             title: Text(
-              'Carteira',
-              style: TextStyle(color: Colors.black, fontSize: setWidth(18.0)),
+              'Wallet',
+              style: TextStyle(color: Colors.black, fontSize: 18.0),
             ),
           ),
         ],
