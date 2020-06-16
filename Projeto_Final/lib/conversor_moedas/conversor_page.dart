@@ -188,7 +188,7 @@ class _ConversorPageState extends State<ConversorPage> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text(
-          "Conversor de Moedas",
+          "Currency converter",
           style: TextStyle(color: Colors.white),
         ),
         backgroundColor: Colors.blueAccent,
@@ -201,7 +201,7 @@ class _ConversorPageState extends State<ConversorPage> {
             Padding(
               padding: EdgeInsets.all(setWidth(1.0)),
               child: Text(
-                "$_moeda1 $_moedaNome equivalem a",
+                "$_moeda1 $_moedaNome Amounts to",
                 style: TextStyle(
                   color: Colors.grey,
                   fontSize: setWidth(20.0),
@@ -326,7 +326,7 @@ class _ConversorPageState extends State<ConversorPage> {
               color: Colors.white,
             ),
             title: Text(
-              'Conversor',
+              'Stock',
               style: TextStyle(color: Colors.white, fontSize: setWidth(18.0)),
             ),
           ),
@@ -336,7 +336,7 @@ class _ConversorPageState extends State<ConversorPage> {
               color: Colors.black,
             ),
             title: Text(
-              'Carteira',
+              'Stock',
               style: TextStyle(color: Colors.black, fontSize: setWidth(18.0)),
             ),
           ),
