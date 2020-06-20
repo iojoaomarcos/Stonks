@@ -180,6 +180,9 @@ class _CarteiraPageState extends State<CarteiraPage> {
                       this._cusSearchBar = TextField(
                         textInputAction: TextInputAction.go,
                         autofocus: true,
+                        onChanged: (value) {
+                          filterSearchResults(value);
+                        },
                         decoration: InputDecoration(
                             enabledBorder: UnderlineInputBorder(
                                 borderSide: BorderSide(color: Colors.black)),
@@ -212,16 +215,16 @@ class _CarteiraPageState extends State<CarteiraPage> {
             backgroundColor: Colors.blueAccent,
           ),
           body: ListView.builder(
-            itemCount: stockList.length,
+            itemCount: stockshown.length,
             itemBuilder: (context, index) {
-              final item = stockList[index].name;
-              final symbol = stockList[index].symbol;
-              final qtde = stockList[index].qtde;
-              final priceBuy = stockList[index].priceBuy;
-              final percent = stockList[index].percent;
-              final valFinal = stockList[index].valFinal;
-              final price = stockList[index].price;
-              final changePercent = stockList[index].changePercent;
+              final item = stockshown[index].name;
+              final symbol = stockshown[index].symbol;
+              final qtde = stockshown[index].qtde;
+              final priceBuy = stockshown[index].priceBuy;
+              final percent = stockshown[index].percent;
+              final valFinal = stockshown[index].valFinal;
+              final price = stockshown[index].price;
+              final changePercent = stockshown[index].changePercent;
 
               return Dismissible(
                 key: Key(item), // Chave de identificacao de item
@@ -236,6 +239,8 @@ class _CarteiraPageState extends State<CarteiraPage> {
                         .child("userTeste")
                         .child(stockList[index].stockID.toString())
                         .remove();
+
+/////////////////////////////////////to - do remover tanto do firebase, tela e listas
 
                     stockList.removeAt(index); //Remove da tela
                   });
