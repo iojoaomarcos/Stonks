@@ -14,4 +14,5 @@ Este projeto é desenvolvido por um time de estudantes da Universidade São Fran
 * Gustavo Lopes - Backend focado em aplicações adicionais de Firebase
 * Guilherme Camargo - Responsável pelo GitHub e Banco de Dados
 
+Professor: José Matias Lemes Filho
 ###
