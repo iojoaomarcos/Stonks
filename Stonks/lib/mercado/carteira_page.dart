@@ -20,6 +20,7 @@ class CarteiraPage extends StatefulWidget {
 class _CarteiraPageState extends State<CarteiraPage> {
   int _selectedIndex = 1; //indice do bottombar
   List<Stock> stockList = []; //Lista das acoes do usuario
+  List<Stock> stockshown = []; //Lista a ser exibida ao usuario
 
   Icon _cusIcon = Icon(Icons.search);
   Widget _cusSearchBar = Text(
@@ -95,6 +96,7 @@ class _CarteiraPageState extends State<CarteiraPage> {
         });
       }
     });
+    stockshown.addAll(stockList);
   }
 
   Widget _porcentagem(percent, valFinal, qtde) {
@@ -139,6 +141,29 @@ class _CarteiraPageState extends State<CarteiraPage> {
     }
   }
 
+  void filterSearchResults(String query) {
+    List<Stock> filteredList = [];
+    filteredList.addAll(stockList);
+    if (query.isNotEmpty) {
+      List<Stock> tempList = [];
+      filteredList.forEach((item) {
+        if (item.name.contains(query) || item.symbol.contains(query)) {
+          tempList.add(item);
+        }
+      });
+      setState(() {
+        stockshown.clear();
+        stockshown.addAll(tempList);
+      });
+      return;
+    } else {
+      setState(() {
+        stockshown.clear();
+        stockshown.addAll(stockList);
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -167,7 +192,8 @@ class _CarteiraPageState extends State<CarteiraPage> {
                       );
                     } else {
                       this._cusIcon = Icon(Icons.search);
-                      this._cusSearchBar = Text("Stocks");
+                      this._cusSearchBar =
+                          Text("Stocks", style: TextStyle(color: Colors.white));
                     }
                   });
                 })
@@ -216,8 +242,8 @@ class _CarteiraPageState extends State<CarteiraPage> {
 
                   //Confirmando que item foi removido
                   Scaffold.of(context) //item = item arrastado
-                      .showSnackBar(SnackBar(
-                          content: Text("$item Removed from list")));
+                      .showSnackBar(
+                          SnackBar(content: Text("$item Removed from list")));
                 },
                 // Quando o item eh arrastado, se mostra uma linha vermelha
                 // induzindo o significado de exclusao
