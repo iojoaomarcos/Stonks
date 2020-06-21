@@ -12,6 +12,7 @@ class BuscaAcaoPage extends StatefulWidget {
 
 class _BuscaAcaoPageState extends State<BuscaAcaoPage> {
   List<AcaoBovespa> bovespaList = []; //Lista das acoes do usuario
+  List<AcaoBovespa> bovespashown = []; //Lista de acoes exibidas na tela
 
   Icon _cusIcon = Icon(Icons.search);
   Widget _cusSearchBar =
@@ -48,13 +49,39 @@ class _BuscaAcaoPageState extends State<BuscaAcaoPage> {
         );
 
         bovespaList.add(acaoBov);
+        bovespashown.add(acaoBov);
       }
 
       setState(() {
         bovespaList.sort((a, b) => a.name.compareTo(b.name));
+        bovespashown.sort((a, b) => a.name.compareTo(b.name));
         print('Available stocks amount: ' + bovespaList.length.toString());
       });
     });
+  }
+
+  void filterSearchResults(String query) {
+    List<AcaoBovespa> filteredList = [];
+    filteredList.addAll(bovespaList);
+    if (query.isNotEmpty) {
+      List<AcaoBovespa> tempList = [];
+      filteredList.forEach((item) {
+        if (item.name.toLowerCase().contains(query.toLowerCase()) ||
+            item.symbol.toLowerCase().contains(query.toLowerCase())) {
+          tempList.add(item);
+        }
+      });
+      setState(() {
+        bovespashown.clear();
+        bovespashown.addAll(tempList);
+      });
+      return;
+    } else {
+      setState(() {
+        bovespashown.clear();
+        bovespashown.addAll(bovespaList);
+      });
+    }
   }
 
   @override
@@ -74,6 +101,9 @@ class _BuscaAcaoPageState extends State<BuscaAcaoPage> {
                     this._cusSearchBar = TextField(
                       textInputAction: TextInputAction.go,
                       autofocus: true,
+                      onChanged: (value) {
+                        filterSearchResults(value);
+                      },
                       decoration: InputDecoration(
                         enabledBorder: UnderlineInputBorder(
                             borderSide: BorderSide(color: Colors.black)),
@@ -85,8 +115,10 @@ class _BuscaAcaoPageState extends State<BuscaAcaoPage> {
                           color: Colors.white, fontSize: setWidth(16.0)),
                     );
                   } else {
+                    filterSearchResults('');
                     this._cusIcon = Icon(Icons.search);
-                    this._cusSearchBar = Text("Find Stocks");
+                    this._cusSearchBar = Text("Find Stocks",
+                        style: TextStyle(color: Colors.white));
                   }
                 });
               })
@@ -94,10 +126,10 @@ class _BuscaAcaoPageState extends State<BuscaAcaoPage> {
         elevation: 20.0,
       ),
       body: ListView.builder(
-          itemCount: bovespaList.length,
+          itemCount: bovespashown.length,
           itemBuilder: (context, index) {
-            final name = bovespaList[index].name;
-            final symbol = bovespaList[index].symbol;
+            final name = bovespashown[index].name;
+            final symbol = bovespashown[index].symbol;
 
             return Column(
               children: <Widget>[
