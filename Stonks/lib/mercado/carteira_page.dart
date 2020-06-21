@@ -92,11 +92,11 @@ class _CarteiraPageState extends State<CarteiraPage> {
 
           setState(() {
             stockList.add(stonks);
+            stockshown.add(stonks);
           });
         });
       }
     });
-    stockshown.addAll(stockList);
   }
 
   Widget _porcentagem(percent, valFinal, qtde) {
@@ -147,7 +147,8 @@ class _CarteiraPageState extends State<CarteiraPage> {
     if (query.isNotEmpty) {
       List<Stock> tempList = [];
       filteredList.forEach((item) {
-        if (item.name.contains(query) || item.symbol.contains(query)) {
+        if (item.name.toLowerCase().contains(query.toLowerCase()) ||
+            item.symbol.toLowerCase().contains(query.toLowerCase())) {
           tempList.add(item);
         }
       });
@@ -194,6 +195,7 @@ class _CarteiraPageState extends State<CarteiraPage> {
                             color: Colors.white, fontSize: setWidth(16.0)),
                       );
                     } else {
+                      filterSearchResults('');
                       this._cusIcon = Icon(Icons.search);
                       this._cusSearchBar =
                           Text("Stocks", style: TextStyle(color: Colors.white));
@@ -236,13 +238,12 @@ class _CarteiraPageState extends State<CarteiraPage> {
                         .reference()
                         .child("users")
                         //.child(globals.userID.toString())/////////////////////////////////
-                        .child("userTeste")
+                        .child("user7Teste")
                         .child(stockList[index].stockID.toString())
                         .remove();
 
-/////////////////////////////////////to - do remover tanto do firebase, tela e listas
-
                     stockList.removeAt(index); //Remove da tela
+                    filterSearchResults('');
                   });
 
                   //Confirmando que item foi removido
