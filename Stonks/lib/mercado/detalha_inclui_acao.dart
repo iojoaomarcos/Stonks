@@ -195,7 +195,7 @@ class _DetalhaIncluiAcaoState extends State<DetalhaIncluiAcao> {
                       .set({
                     'name': name,
                     'priceBuy': price,
-                    'qtde': qtdeController.text,
+                    'qtde': int.parse(qtdeController.text),
                     'symbol': symbol
                   });
                 }, //grava posição no banco
