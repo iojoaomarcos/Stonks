@@ -185,7 +185,6 @@ class _DetalhaIncluiAcaoState extends State<DetalhaIncluiAcao> {
               height: setHeight(35.0),
               child: RaisedButton(
                 color: Colors.blueAccent,
-
                 onPressed: () {
                   FirebaseDatabase.instance
                       .reference()
@@ -198,8 +197,9 @@ class _DetalhaIncluiAcaoState extends State<DetalhaIncluiAcao> {
                     'qtde': int.parse(qtdeController.text),
                     'symbol': symbol
                   });
-                }, //grava posição no banco
-
+                  Navigator.of(context).popUntil(
+                      (route) => route.isFirst); // Volta para tela Stock
+                },
                 child: Text('Add Purchase',
                     style: TextStyle(
                         color: Colors.white, fontSize: setWidth(20.0))),
