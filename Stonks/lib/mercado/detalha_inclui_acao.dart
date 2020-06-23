@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
-
+import 'package:projeto_final_acoes/UserData.dart' as globals;
 import 'package:projeto_final_acoes/helpers/appSize.dart';
 
 class DetalhaIncluiAcao extends StatefulWidget {
@@ -190,12 +190,13 @@ class _DetalhaIncluiAcaoState extends State<DetalhaIncluiAcao> {
                   FirebaseDatabase.instance
                       .reference()
                       .child('users')
-                      .child('globals.userID')
+                      .child(globals.userID)
+                      .child(symbol)
                       .set({
-                    'name': 'Ambev S.A.',
-                    'priceBuy': '13.26',
-                    'qtde': '25',
-                    'symbol': 'ABEV3'
+                    'name': name,
+                    'priceBuy': price,
+                    'qtde': qtdeController.text,
+                    'symbol': symbol
                   });
                 }, //grava posição no banco
 
