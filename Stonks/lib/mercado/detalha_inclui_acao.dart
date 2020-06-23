@@ -7,6 +7,8 @@ import 'dart:convert';
 import 'package:projeto_final_acoes/UserData.dart' as globals;
 import 'package:projeto_final_acoes/helpers/appSize.dart';
 
+import 'carteira_page.dart';
+
 class DetalhaIncluiAcao extends StatefulWidget {
   @override
   _DetalhaIncluiAcaoState createState() => _DetalhaIncluiAcaoState();
@@ -197,8 +199,10 @@ class _DetalhaIncluiAcaoState extends State<DetalhaIncluiAcao> {
                     'qtde': int.parse(qtdeController.text),
                     'symbol': symbol
                   });
-                  Navigator.of(context).popUntil(
-                      (route) => route.isFirst); // Volta para tela Stock
+                  // Navigator.of(context).popUntil(
+                  //     (route) => route.isFirst); // Volta para tela Stock
+                  Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(builder: (context) => CarteiraPage()));
                 },
                 child: Text('Add Purchase',
                     style: TextStyle(
