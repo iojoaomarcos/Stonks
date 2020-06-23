@@ -292,7 +292,7 @@ class _CarteiraPageState extends State<CarteiraPage> {
                           children: <Widget>[
                             Padding(
                               padding: EdgeInsets.only(
-                                  top: setHeight(8.0), bottom: setHeight(5.0)),
+                                  top: setHeight(10.0), bottom: setHeight(5.0)),
                               child: Text(
                                 '$symbol',
                                 style: TextStyle(

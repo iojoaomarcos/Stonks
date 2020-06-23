@@ -9,6 +9,6 @@ class AppSize {
   }
 
   static double heightProportions(double value) {
-    return value / xdWidhtSize;
+    return value / xdHeightSize;
   }
 }

@@ -184,7 +184,7 @@ class _DetalhaIncluiAcaoState extends State<DetalhaIncluiAcao> {
               ),
             ),
             Container(
-              height: setHeight(35.0),
+              height: setHeight(60.0),
               child: RaisedButton(
                 color: Colors.blueAccent,
                 onPressed: () {
