@@ -80,7 +80,7 @@ class _LoginPageState extends State<LoginPage> {
             children: <Widget>[
               Image(
                   image: AssetImage("images/google_logo.png"),
-                  height: setHeight(20.0)),
+                  height: setHeight(40.0)),
               Padding(
                 padding: EdgeInsets.only(left: setWidth(10.0)),
                 child: Text(

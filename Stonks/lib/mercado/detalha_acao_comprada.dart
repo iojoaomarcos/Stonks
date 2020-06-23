@@ -199,7 +199,7 @@ class _DetalhaAcaoCompradaState extends State<DetalhaAcaoComprada> {
               ),
             ),
             Container(
-              height: setHeight(35.0),
+              height: setHeight(60.0),
               child: RaisedButton(
                 color: Colors.blueAccent,
                 onPressed: () {}, //tira posição do banco

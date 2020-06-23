@@ -199,7 +199,7 @@ class _ConversorPageState extends State<ConversorPage> {
         child: Column(
           children: <Widget>[
             Padding(
-              padding: EdgeInsets.all(setWidth(1.0)),
+              padding: EdgeInsets.all(setHeight(10.0)),
               child: Text(
                 "$_moeda1 $_moedaNome Amounts to",
                 style: TextStyle(
@@ -326,7 +326,7 @@ class _ConversorPageState extends State<ConversorPage> {
               color: Colors.white,
             ),
             title: Text(
-              'Stocks',
+              'Converter',
               style: TextStyle(color: Colors.white, fontSize: setWidth(18.0)),
             ),
           ),

@@ -20,6 +20,7 @@ class CarteiraPage extends StatefulWidget {
 class _CarteiraPageState extends State<CarteiraPage> {
   int _selectedIndex = 1; //indice do bottombar
   List<Stock> stockList = []; //Lista das acoes do usuario
+  List<Stock> stockshown = []; //Lista a ser exibida ao usuario
 
   Icon _cusIcon = Icon(Icons.search);
   Widget _cusSearchBar = Text(
@@ -45,11 +46,24 @@ class _CarteiraPageState extends State<CarteiraPage> {
 
     print('The user has the following id: ' + globals.userID);
 
-    //FirebaseDatabase.instance.reference().child("users").child(globals.userID).set({"user": globals.userID});
+    FirebaseDatabase.instance
+        .reference()
+        .child("users")
+        .child(globals.userID)
+        .child('login')
+        .set({"user": globals.userID});
 
-    DatabaseReference stocksRef =
-        FirebaseDatabase.instance.reference().child("users").child("userTeste");
-    //.child(globals.userID.toString());////////////////////////////////////////
+    DatabaseReference stocksRef = FirebaseDatabase.instance
+        .reference()
+        .child("users")
+        .child(globals.userID.toString());
+
+    FirebaseDatabase.instance
+        .reference()
+        .child("users")
+        .child(globals.userID)
+        .child('login')
+        .remove();
 
     stocksRef.once().then((DataSnapshot snap) {
       var key = snap.value.keys;
@@ -91,6 +105,7 @@ class _CarteiraPageState extends State<CarteiraPage> {
 
           setState(() {
             stockList.add(stonks);
+            stockshown.add(stonks);
           });
         });
       }
@@ -139,6 +154,30 @@ class _CarteiraPageState extends State<CarteiraPage> {
     }
   }
 
+  void filterSearchResults(String query) {
+    List<Stock> filteredList = [];
+    filteredList.addAll(stockList);
+    if (query.isNotEmpty) {
+      List<Stock> tempList = [];
+      filteredList.forEach((item) {
+        if (item.name.toLowerCase().contains(query.toLowerCase()) ||
+            item.symbol.toLowerCase().contains(query.toLowerCase())) {
+          tempList.add(item);
+        }
+      });
+      setState(() {
+        stockshown.clear();
+        stockshown.addAll(tempList);
+      });
+      return;
+    } else {
+      setState(() {
+        stockshown.clear();
+        stockshown.addAll(stockList);
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -155,6 +194,9 @@ class _CarteiraPageState extends State<CarteiraPage> {
                       this._cusSearchBar = TextField(
                         textInputAction: TextInputAction.go,
                         autofocus: true,
+                        onChanged: (value) {
+                          filterSearchResults(value);
+                        },
                         decoration: InputDecoration(
                             enabledBorder: UnderlineInputBorder(
                                 borderSide: BorderSide(color: Colors.black)),
@@ -166,8 +208,10 @@ class _CarteiraPageState extends State<CarteiraPage> {
                             color: Colors.white, fontSize: setWidth(16.0)),
                       );
                     } else {
+                      filterSearchResults('');
                       this._cusIcon = Icon(Icons.search);
-                      this._cusSearchBar = Text("Stocks");
+                      this._cusSearchBar =
+                          Text("Stocks", style: TextStyle(color: Colors.white));
                     }
                   });
                 })
@@ -186,16 +230,16 @@ class _CarteiraPageState extends State<CarteiraPage> {
             backgroundColor: Colors.blueAccent,
           ),
           body: ListView.builder(
-            itemCount: stockList.length,
+            itemCount: stockshown.length,
             itemBuilder: (context, index) {
-              final item = stockList[index].name;
-              final symbol = stockList[index].symbol;
-              final qtde = stockList[index].qtde;
-              final priceBuy = stockList[index].priceBuy;
-              final percent = stockList[index].percent;
-              final valFinal = stockList[index].valFinal;
-              final price = stockList[index].price;
-              final changePercent = stockList[index].changePercent;
+              final item = stockshown[index].name;
+              final symbol = stockshown[index].symbol;
+              final qtde = stockshown[index].qtde;
+              final priceBuy = stockshown[index].priceBuy;
+              final percent = stockshown[index].percent;
+              final valFinal = stockshown[index].valFinal;
+              final price = stockshown[index].price;
+              final changePercent = stockshown[index].changePercent;
 
               return Dismissible(
                 key: Key(item), // Chave de identificacao de item
@@ -206,18 +250,18 @@ class _CarteiraPageState extends State<CarteiraPage> {
                     FirebaseDatabase.instance //Remove do Firebase
                         .reference()
                         .child("users")
-                        //.child(globals.userID.toString())/////////////////////////////////
-                        .child("userTeste")
+                        .child(globals.userID.toString())
                         .child(stockList[index].stockID.toString())
                         .remove();
 
                     stockList.removeAt(index); //Remove da tela
+                    filterSearchResults('');
                   });
 
                   //Confirmando que item foi removido
                   Scaffold.of(context) //item = item arrastado
-                      .showSnackBar(SnackBar(
-                          content: Text("$item Removed from list")));
+                      .showSnackBar(
+                          SnackBar(content: Text("$item Removed from list")));
                 },
                 // Quando o item eh arrastado, se mostra uma linha vermelha
                 // induzindo o significado de exclusao
@@ -248,7 +292,7 @@ class _CarteiraPageState extends State<CarteiraPage> {
                           children: <Widget>[
                             Padding(
                               padding: EdgeInsets.only(
-                                  top: setHeight(8.0), bottom: setHeight(5.0)),
+                                  top: setHeight(10.0), bottom: setHeight(5.0)),
                               child: Text(
                                 '$symbol',
                                 style: TextStyle(
