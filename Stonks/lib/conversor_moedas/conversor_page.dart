@@ -326,7 +326,7 @@ class _ConversorPageState extends State<ConversorPage> {
               color: Colors.white,
             ),
             title: Text(
-              'Stocks',
+              'Converter',
               style: TextStyle(color: Colors.white, fontSize: setWidth(18.0)),
             ),
           ),
