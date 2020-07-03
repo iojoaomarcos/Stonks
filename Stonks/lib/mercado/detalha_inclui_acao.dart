@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
-
+import 'package:projeto_final_acoes/UserData.dart' as globals;
 import 'package:projeto_final_acoes/helpers/appSize.dart';
+
+import 'carteira_page.dart';
 
 class DetalhaIncluiAcao extends StatefulWidget {
   @override
@@ -182,23 +184,26 @@ class _DetalhaIncluiAcaoState extends State<DetalhaIncluiAcao> {
               ),
             ),
             Container(
-              height: setHeight(35.0),
+              height: setHeight(60.0),
               child: RaisedButton(
                 color: Colors.blueAccent,
-
                 onPressed: () {
                   FirebaseDatabase.instance
                       .reference()
                       .child('users')
-                      .child('globals.userID')
+                      .child(globals.userID)
+                      .child(symbol)
                       .set({
-                    'name': 'Ambev S.A.',
-                    'priceBuy': '13.26',
-                    'qtde': '25',
-                    'symbol': 'ABEV3'
+                    'name': name,
+                    'priceBuy': price,
+                    'qtde': int.parse(qtdeController.text),
+                    'symbol': symbol
                   });
-                }, //grava posição no banco
-
+                  // Navigator.of(context).popUntil(
+                  //     (route) => route.isFirst); // Volta para tela Stock
+                  Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(builder: (context) => CarteiraPage()));
+                },
                 child: Text('Add Purchase',
                     style: TextStyle(
                         color: Colors.white, fontSize: setWidth(20.0))),

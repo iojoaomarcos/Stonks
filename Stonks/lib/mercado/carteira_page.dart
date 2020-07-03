@@ -46,11 +46,24 @@ class _CarteiraPageState extends State<CarteiraPage> {
 
     print('The user has the following id: ' + globals.userID);
 
-    //FirebaseDatabase.instance.reference().child("users").child(globals.userID).set({"user": globals.userID});
+    FirebaseDatabase.instance
+        .reference()
+        .child("users")
+        .child(globals.userID)
+        .child('login')
+        .set({"user": globals.userID});
 
-    DatabaseReference stocksRef =
-        FirebaseDatabase.instance.reference().child("users").child("userTeste");
-    //.child(globals.userID.toString());////////////////////////////////////////
+    DatabaseReference stocksRef = FirebaseDatabase.instance
+        .reference()
+        .child("users")
+        .child(globals.userID.toString());
+
+    FirebaseDatabase.instance
+        .reference()
+        .child("users")
+        .child(globals.userID)
+        .child('login')
+        .remove();
 
     stocksRef.once().then((DataSnapshot snap) {
       var key = snap.value.keys;
@@ -237,8 +250,7 @@ class _CarteiraPageState extends State<CarteiraPage> {
                     FirebaseDatabase.instance //Remove do Firebase
                         .reference()
                         .child("users")
-                        //.child(globals.userID.toString())/////////////////////////////////
-                        .child("user7Teste")
+                        .child(globals.userID.toString())
                         .child(stockList[index].stockID.toString())
                         .remove();
 
@@ -280,7 +292,7 @@ class _CarteiraPageState extends State<CarteiraPage> {
                           children: <Widget>[
                             Padding(
                               padding: EdgeInsets.only(
-                                  top: setHeight(8.0), bottom: setHeight(5.0)),
+                                  top: setHeight(10.0), bottom: setHeight(5.0)),
                               child: Text(
                                 '$symbol',
                                 style: TextStyle(
