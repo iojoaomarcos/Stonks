@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="default_web_client_id" translatable="false">269753188394-i3b39mgu9242of4mulr0psvuop1f97dh.apps.googleusercontent.com</string>
+    <string name="firebase_database_url" translatable="false">https://stonks-bd072.firebaseio.com</string>
+    <string name="gcm_defaultSenderId" translatable="false">269753188394</string>
+    <string name="google_api_key" translatable="false">AIzaSyATUUYWPOG5RDd0XsaOYDCTOZXsbxuxaiE</string>
+    <string name="google_app_id" translatable="false">1:269753188394:android:5c89ba37dff28e0bffc353</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyATUUYWPOG5RDd0XsaOYDCTOZXsbxuxaiE</string>
+    <string name="google_storage_bucket" translatable="false">stonks-bd072.appspot.com</string>
+    <string name="project_id" translatable="false">stonks-bd072</string>
+</resources>
