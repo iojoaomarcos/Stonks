@@ -6,7 +6,7 @@ void main() {
     home: LoginPage(),
     theme: ThemeData(
       hintColor: Colors.blueAccent,
-      primaryColor: Colors.white,
+      primaryColor: Colors.blueAccent,
       inputDecorationTheme: InputDecorationTheme(
           enabledBorder:
               OutlineInputBorder(borderSide: BorderSide(color: Colors.black)),
