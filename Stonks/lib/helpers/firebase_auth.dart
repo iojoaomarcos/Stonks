@@ -33,6 +33,7 @@ class AuthService {
     print("user: " + user.uid);
 
     globals.userID = user.uid.toString();
+    globals.googleSignIn = googleSignIn;
 
     return user.uid;
   }

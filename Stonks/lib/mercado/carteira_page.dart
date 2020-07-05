@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
@@ -15,7 +16,7 @@ import 'dart:async';
 import 'dart:convert';
 
 class CarteiraPage extends StatefulWidget {
-  CarteiraPage({Key key}) : super(key: key); ////////Chave para lista Carteira
+  CarteiraPage({Key key}) : super(key: key); //Chave para lista Carteira
   @override
   _CarteiraPageState createState() => _CarteiraPageState();
 }
@@ -236,13 +237,14 @@ class _CarteiraPageState extends State<CarteiraPage> {
               ListTile(
                 title: Text(
                   "Converter",
-                  style: TextStyle(color: Colors.black, fontSize: setWidth(16.0)),
+                  style:
+                      TextStyle(color: Colors.black, fontSize: setWidth(16.0)),
                 ),
                 trailing: Icon(
                   Icons.attach_money,
                   color: Colors.black,
                 ),
-                onTap: (){
+                onTap: () {
                   Navigator.of(context).pushReplacement(
                     MaterialPageRoute(builder: (context) => ConversorPage()),
                   );
@@ -250,34 +252,41 @@ class _CarteiraPageState extends State<CarteiraPage> {
               ),
               Divider(),
               ListTile(
-                title: Text(
-                  "Stocks",
-                  style: TextStyle(color: Colors.black, fontSize: setWidth(16.0)),
-                ),
-                trailing: Icon(
-                  Icons.equalizer,
-                  color: Colors.black,
-                ),
-                onTap: (){
-                  Navigator.of(context).pop();
-                }
-              ),
+                  title: Text(
+                    "Stocks",
+                    style: TextStyle(
+                        color: Colors.black, fontSize: setWidth(16.0)),
+                  ),
+                  trailing: Icon(
+                    Icons.equalizer,
+                    color: Colors.black,
+                  ),
+                  onTap: () {
+                    Navigator.of(context).pop();
+                  }),
               Divider(),
               ListTile(
-                title: Text(
-                  "Logout",
-                  style: TextStyle(color: Colors.black, fontSize: setWidth(16.0)),
-                ),
-                trailing: Icon(
-                  Icons.exit_to_app,
-                  color: Colors.black,
-                ),
-                onTap: (){
-                  Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (context) => LoginPage()),
-                  );
-                }
-              ),
+                  title: Text(
+                    "Logout",
+                    style: TextStyle(
+                        color: Colors.black, fontSize: setWidth(16.0)),
+                  ),
+                  trailing: Icon(
+                    Icons.exit_to_app,
+                    color: Colors.black,
+                  ),
+                  onTap: () {
+                    signOut() async {
+                      globals.googleSignIn.signOut();
+                      final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+                      await _firebaseAuth.signOut();
+                    }
+
+                    signOut();
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(builder: (context) => LoginPage()),
+                    );
+                  }),
               Divider(),
             ],
           ),

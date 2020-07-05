@@ -10,8 +10,7 @@ import 'package:projeto_final_acoes/conversor_moedas/currencies.dart';
 import 'package:projeto_final_acoes/helpers/appSize.dart';
 import 'dart:async';
 import 'dart:convert';
-import 'package:projeto_final_acoes/helpers/firebase_auth.dart';
-
+import 'package:projeto_final_acoes/UserData.dart' as globals;
 
 class ConversorPage extends StatefulWidget {
   @override
@@ -219,46 +218,49 @@ class _ConversorPageState extends State<ConversorPage> {
                 Icons.attach_money,
                 color: Colors.black,
               ),
-              onTap: (){
+              onTap: () {
                 Navigator.of(context).pop();
               },
             ),
             Divider(),
             ListTile(
-              title: Text(
-                "Stocks",
-                style: TextStyle(color: Colors.black, fontSize: setWidth(16.0)),
-              ),
-              trailing: Icon(
-                Icons.equalizer,
-                color: Colors.black,
-              ),
-              onTap: (){
-                Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (context) => CarteiraPage()),
-                );
-              }
-            ),
+                title: Text(
+                  "Stocks",
+                  style:
+                      TextStyle(color: Colors.black, fontSize: setWidth(16.0)),
+                ),
+                trailing: Icon(
+                  Icons.equalizer,
+                  color: Colors.black,
+                ),
+                onTap: () {
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(builder: (context) => CarteiraPage()),
+                  );
+                }),
             Divider(),
             ListTile(
-              title: Text(
-                "Logout",
-                style: TextStyle(color: Colors.black, fontSize: setWidth(16.0)),
-              ),
-              trailing: Icon(
-                Icons.exit_to_app,
-                color: Colors.black,
-              ),
-              onTap: (){
-                signOut() async {
-                  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;    
-                  await _firebaseAuth.signOut();
-                }
-                Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (context) => LoginPage()),
-                );
-              }
-            ),
+                title: Text(
+                  "Logout",
+                  style:
+                      TextStyle(color: Colors.black, fontSize: setWidth(16.0)),
+                ),
+                trailing: Icon(
+                  Icons.exit_to_app,
+                  color: Colors.black,
+                ),
+                onTap: () {
+                  signOut() async {
+                    globals.googleSignIn.signOut();
+                    final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+                    await _firebaseAuth.signOut();
+                  }
+
+                  signOut();
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(builder: (context) => LoginPage()),
+                  );
+                }),
             Divider(),
           ],
         ),
