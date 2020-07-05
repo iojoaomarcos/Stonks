@@ -215,9 +215,11 @@ class _BuscaAcaoPageState extends State<BuscaAcaoPage> {
                       timezone =
                           snapshot.data["results"]["market_time"]["timezone"];
                       cap = snapshot.data["results"]["market_cap"];
-                      preco = snapshot.data["results"]["price"];
-                      porcentagem = snapshot.data["results"]["change_percent"];
-                      atualizacao = snapshot.data["results"]["updated_at"];
+                      preco = snapshot.data["results"]["market_cap"]["price"];
+                      porcentagem = snapshot.data["results"]["market_cap"]
+                          ["change_percent"];
+                      atualizacao =
+                          snapshot.data["results"]["market_cap"]["updated_at"];
 
                       return SingleChildScrollView(
                         padding: EdgeInsets.all(10.0),
@@ -283,7 +285,7 @@ class _BuscaAcaoPageState extends State<BuscaAcaoPage> {
                             Padding(
                               padding: EdgeInsets.all(10.0),
                               child: Text(
-                                "$preco, preço",
+                                "$preco, preco",
                                 style: TextStyle(
                                     color: Colors.grey, fontSize: 20.0),
                               ),
