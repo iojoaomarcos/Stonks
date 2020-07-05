@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
@@ -9,6 +10,7 @@ import 'package:projeto_final_acoes/conversor_moedas/currencies.dart';
 import 'package:projeto_final_acoes/helpers/appSize.dart';
 import 'dart:async';
 import 'dart:convert';
+import 'package:projeto_final_acoes/helpers/firebase_auth.dart';
 
 
 class ConversorPage extends StatefulWidget {
@@ -248,6 +250,10 @@ class _ConversorPageState extends State<ConversorPage> {
                 color: Colors.black,
               ),
               onTap: (){
+                signOut() async {
+                  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;    
+                  await _firebaseAuth.signOut();
+                }
                 Navigator.of(context).pushReplacement(
                   MaterialPageRoute(builder: (context) => LoginPage()),
                 );
