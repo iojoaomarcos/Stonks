@@ -202,11 +202,11 @@ class _ConversorPageState extends State<ConversorPage> {
         child: ListView(
           children: <Widget>[
             UserAccountsDrawerHeader(
-              accountName: Text("Exemplo"),
-              accountEmail: Text("exemplo@gmail.com"),
+              accountName: Text(globals.googleSignIn.currentUser.displayName),
+              accountEmail: Text(globals.googleSignIn.currentUser.email),
               currentAccountPicture: CircleAvatar(
-                backgroundColor: Colors.white,
-                child: Text("E"),
+                backgroundImage:
+                    NetworkImage(globals.googleSignIn.currentUser.photoUrl),
               ),
             ),
             ListTile(
