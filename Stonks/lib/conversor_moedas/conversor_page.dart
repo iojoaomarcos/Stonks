@@ -1,13 +1,16 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+
+import 'package:projeto_final_acoes/mercado/carteira_page.dart';
+import 'package:projeto_final_acoes/login/login_page.dart';
 
 import 'package:http/http.dart' as http;
 import 'package:projeto_final_acoes/conversor_moedas/currencies.dart';
 import 'package:projeto_final_acoes/helpers/appSize.dart';
 import 'dart:async';
 import 'dart:convert';
-
-import 'package:projeto_final_acoes/mercado/carteira_page.dart';
+import 'package:projeto_final_acoes/UserData.dart' as globals;
 
 class ConversorPage extends StatefulWidget {
   @override
@@ -193,6 +196,74 @@ class _ConversorPageState extends State<ConversorPage> {
         ),
         backgroundColor: Colors.blueAccent,
         elevation: 20.0,
+        iconTheme: IconThemeData(color: Colors.white),
+      ),
+      drawer: Drawer(
+        child: ListView(
+          children: <Widget>[
+            UserAccountsDrawerHeader(
+              accountName: Text(globals.googleSignIn.currentUser.displayName),
+              accountEmail: Text(globals.googleSignIn.currentUser.email),
+              currentAccountPicture: CircleAvatar(
+                backgroundImage:
+                    NetworkImage(globals.googleSignIn.currentUser.photoUrl),
+              ),
+            ),
+            ListTile(
+              title: Text(
+                "Converter",
+                style: TextStyle(color: Colors.black, fontSize: setWidth(16.0)),
+              ),
+              trailing: Icon(
+                Icons.attach_money,
+                color: Colors.black,
+              ),
+              onTap: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            Divider(),
+            ListTile(
+                title: Text(
+                  "Stocks",
+                  style:
+                      TextStyle(color: Colors.black, fontSize: setWidth(16.0)),
+                ),
+                trailing: Icon(
+                  Icons.equalizer,
+                  color: Colors.black,
+                ),
+                onTap: () {
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(builder: (context) => CarteiraPage()),
+                  );
+                }),
+            Divider(),
+            ListTile(
+                title: Text(
+                  "Logout",
+                  style:
+                      TextStyle(color: Colors.black, fontSize: setWidth(16.0)),
+                ),
+                trailing: Icon(
+                  Icons.exit_to_app,
+                  color: Colors.black,
+                ),
+                onTap: () {
+                  signOut() async {
+                    globals.googleSignIn.signOut();
+                    final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+                    await _firebaseAuth.signOut();
+                  }
+
+                  signOut();
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(builder: (context) => LoginPage()),
+                  );
+                }),
+            Divider(),
+          ],
+        ),
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(setWidth(10.0)),
