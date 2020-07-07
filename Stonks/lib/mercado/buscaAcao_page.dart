@@ -25,9 +25,6 @@ class BuscaAcaoPage extends StatefulWidget {
 }
 
 class _BuscaAcaoPageState extends State<BuscaAcaoPage> {
-  List<AcaoBovespa> bovespaList = []; //Lista das acoes do usuario
-  List<AcaoBovespa> bovespashown = []; //Lista de acoes exibidas na tela
-
   get _focusNode =>
       "https://api.hgbrasil.com/finance/stock_price?key=9b96250e&symbol=get-high";
 
@@ -37,14 +34,6 @@ class _BuscaAcaoPageState extends State<BuscaAcaoPage> {
   var symbol;
 
   //Responsive APP
-  double setWidth(double value) {
-    return value * AppSize.widthProportions(MediaQuery.of(context).size.width);
-  }
-
-  double setHeight(double value) {
-    return value *
-        AppSize.heightProportions(MediaQuery.of(context).size.height);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -209,53 +198,6 @@ class _BuscaAcaoPageState extends State<BuscaAcaoPage> {
                               style:
                                   TextStyle(color: Colors.grey, fontSize: 20.0),
                             ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: ListView.builder(
-                                itemCount: bovespashown.length,
-                                itemBuilder: (context, index) {
-                                  final name = bovespashown[index].name;
-                                  final symbol = bovespashown[index].symbol;
-
-                                  return Column(
-                                    children: <Widget>[
-                                      ListTile(
-                                        title: Text('$name',
-                                            style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: setWidth(20.0),
-                                              fontWeight: FontWeight.bold,
-                                            )),
-                                        subtitle: Padding(
-                                          padding: EdgeInsets.only(
-                                              top: setHeight(8.0)),
-                                          child: Text(
-                                            '$symbol',
-                                            style: TextStyle(
-                                                color: Colors.grey[400],
-                                                fontSize: setWidth(14.0)),
-                                          ),
-                                        ),
-                                        trailing: Icon(Icons.arrow_forward_ios),
-                                        onTap: () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    DetalhaIncluiAcao(
-                                                        symbol: symbol,
-                                                        name: name)),
-                                          );
-                                        }, //Muda para página contendo detalhes da ação passando como parametro o simbolo
-                                      ),
-                                      Divider(
-                                        height: setHeight(2.0),
-                                        color: Colors.grey,
-                                      )
-                                    ],
-                                  );
-                                }),
                           ),
                         ],
                       ),
