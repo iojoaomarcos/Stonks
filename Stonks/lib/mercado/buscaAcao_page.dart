@@ -1,9 +1,10 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-
+import 'package:http/http.dart' as http;
 import 'package:projeto_final_acoes/helpers/acaoBovespa.dart';
 import 'package:projeto_final_acoes/helpers/appSize.dart';
 import 'package:projeto_final_acoes/mercado/detalha_inclui_acao.dart';
+import 'dart:convert';
 
 class BuscaAcaoPage extends StatefulWidget {
   @override
@@ -53,6 +54,26 @@ class _BuscaAcaoPageState extends State<BuscaAcaoPage> {
       }
 
       setState(() {
+        String symbol;
+
+        Future<Map> getData(request) async {
+          http.Response response = await http.get(request);
+          return json.decode(response.body);
+        }
+
+        final request =
+            "https://api.hgbrasil.com/finance/stock_price?key=23cf857d&symbol=get-high";
+
+        Future<Map> response = getData(request);
+
+        response.then((snap) {
+          setState(() {
+            symbol = snap['results']['']['symbol'];
+          });
+        });
+
+        print(symbol.toString());
+
         bovespaList.sort((a, b) => a.name.compareTo(b.name));
         bovespashown.sort((a, b) => a.name.compareTo(b.name));
         print('Available stocks amount: ' + bovespaList.length.toString());
