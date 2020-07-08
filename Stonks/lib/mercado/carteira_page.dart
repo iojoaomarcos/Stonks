@@ -107,6 +107,8 @@ class _CarteiraPageState extends State<CarteiraPage> {
             individualKey,
           );
 
+          print(data[individualKey]['symbol']);
+
           setState(() {
             stockList.add(stonks);
             stockshown.add(stonks);
